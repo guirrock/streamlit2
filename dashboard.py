@@ -51,23 +51,29 @@ keywords = st.sidebar.multiselect(
     key="keywords"
 )
 
+# Filtro para a categoria de referência
+categoria_referencia = st.sidebar.selectbox(
+    "Escolha a Categoria de Referência para Ordenação:",
+    options=freq_df["Categoria"].unique(),
+    key="categoria_referencia"
+)
+
 # Filtrar os dados com base nas escolhas do usuário
 filtered_df = freq_df[
     (freq_df["Categoria"].isin(categorias)) &
     (freq_df["Keyword"].isin(keywords))
 ]
 
-# Opção para o usuário escolher a ordenação das categorias
-categoria_ordem = st.sidebar.selectbox(
-    "Ordenar Categorias por:",
-    options=["BT1", "BT2", "BT3", "BT4", "BT5", "BT6"],  # Substitua com as categorias reais
-    key="categoria_ordem"
-)
+# Ordenar as palavras-chave com base na categoria de referência
+referencia_df = filtered_df[filtered_df["Categoria"] == categoria_referencia]
+referencia_ordem = referencia_df.groupby("Keyword")["Frequency"].sum().sort_values(ascending=False).index
 
-# Garantir que as categorias estejam ordenadas de acordo com a escolha do usuário
-filtered_df['Categoria'] = pd.Categorical(filtered_df['Categoria'], 
-                                           categories=[categoria_ordem] + [cat for cat in categorias if cat != categoria_ordem],
-                                           ordered=True)
+# Atualizar a ordem das palavras-chave no DataFrame filtrado
+filtered_df["Keyword"] = pd.Categorical(
+    filtered_df["Keyword"],
+    categories=referencia_ordem,
+    ordered=True
+)
 
 # Heatmap interativo
 fig = px.density_heatmap(
@@ -76,7 +82,7 @@ fig = px.density_heatmap(
     y="Categoria",
     z="Frequency",
     color_continuous_scale='Viridis',
-    title="Heatmap de Frequências por Nível da Taxonomia e Verbo",
+    title=f"Heatmap de Frequências Ordenado por {categoria_referencia}",
 )
 
 # Layout do Heatmap

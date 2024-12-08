@@ -26,7 +26,7 @@ min_occurencias = st.sidebar.number_input(
     min_value=1,
     value=5,
     step=1,
-    key="min_occurencias"
+    key="min_occurencias"  # Adicionando uma chave única
 )
 
 # Calcular a frequência total de cada verbo em todas as categorias
@@ -40,7 +40,7 @@ categorias = st.sidebar.multiselect(
     "Selecione as Categorias:",
     options=freq_df["Categoria"].unique(),
     default=freq_df["Categoria"].unique(),
-    key="categorias"
+    key="categorias"  # Chave única para as categorias
 )
 
 # Exibir o filtro para os verbos (usando apenas os verbos filtrados)
@@ -48,14 +48,14 @@ keywords = st.sidebar.multiselect(
     "Selecione os Verbos (Palavras-Chave):",
     options=verbos_filtrados,
     default=verbos_filtrados,
-    key="keywords"
+    key="keywords"  # Chave única para os verbos
 )
 
-# Filtro para a categoria de referência
-categoria_referencia = st.sidebar.selectbox(
-    "Escolha a Categoria de Referência para Ordenação:",
-    options=freq_df["Categoria"].unique(),
-    key="categoria_referencia"
+# Adicionar um seletor para escolher a categoria de ordenação
+categoria_ordem = st.sidebar.selectbox(
+    "Selecione a Categoria para Ordenação:",
+    options=categorias,
+    index=0  # Padrão para a primeira categoria na lista
 )
 
 # Filtrar os dados com base nas escolhas do usuário
@@ -64,16 +64,21 @@ filtered_df = freq_df[
     (freq_df["Keyword"].isin(keywords))
 ]
 
-# Ordenar as palavras-chave com base na categoria de referência
-referencia_df = filtered_df[filtered_df["Categoria"] == categoria_referencia]
-referencia_ordem = referencia_df.groupby("Keyword")["Frequency"].sum().sort_values(ascending=False).index
-
-# Atualizar a ordem das palavras-chave no DataFrame filtrado
-filtered_df["Keyword"] = pd.Categorical(
-    filtered_df["Keyword"],
-    categories=referencia_ordem,
-    ordered=True
+# Ordenar os verbos pela soma da frequência na categoria selecionada
+ordenacao_verbo = (
+    filtered_df[filtered_df["Categoria"] == categoria_ordem]
+    .groupby("Keyword")["Frequency"]
+    .sum()
+    .sort_values(ascending=False)
+    .index
 )
+
+# Garantir a ordem dos verbos no eixo do gráfico
+filtered_df['Keyword'] = pd.Categorical(filtered_df['Keyword'], categories=ordenacao_verbo, ordered=True)
+
+# Garantir que as categorias estejam na ordem correta
+categoria_order = sorted(filtered_df['Categoria'].unique())  # Ajuste se quiser uma ordem personalizada
+filtered_df['Categoria'] = pd.Categorical(filtered_df['Categoria'], categories=categoria_order, ordered=True)
 
 # Heatmap interativo
 fig = px.density_heatmap(
@@ -82,7 +87,7 @@ fig = px.density_heatmap(
     y="Categoria",
     z="Frequency",
     color_continuous_scale='Viridis',
-    title=f"Heatmap de Frequências Ordenado por {categoria_referencia}",
+    title="Heatmap de Frequências por Nível da Taxonomia e Verbo",
 )
 
 # Layout do Heatmap

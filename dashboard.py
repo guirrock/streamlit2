@@ -51,11 +51,11 @@ keywords = st.sidebar.multiselect(
     key="keywords"  # Chave única para os verbos
 )
 
-# Adicionar um seletor para escolher a categoria de ordenação
+# Adicionar uma opção para o usuário escolher a categoria de ordenação
 categoria_ordem = st.sidebar.selectbox(
-    "Selecione a Categoria para Ordenação:",
+    "Selecione a categoria para ordenar os verbos:",
     options=categorias,
-    index=0  # Padrão para a primeira categoria na lista
+    key="categoria_ordem"
 )
 
 # Filtrar os dados com base nas escolhas do usuário
@@ -64,17 +64,16 @@ filtered_df = freq_df[
     (freq_df["Keyword"].isin(keywords))
 ]
 
-# Ordenar os verbos pela soma da frequência na categoria selecionada
-ordenacao_verbo = (
-    filtered_df[filtered_df["Categoria"] == categoria_ordem]
-    .groupby("Keyword")["Frequency"]
-    .sum()
-    .sort_values(ascending=False)
-    .index
-)
-
-# Garantir a ordem dos verbos no eixo do gráfico
-filtered_df['Keyword'] = pd.Categorical(filtered_df['Keyword'], categories=ordenacao_verbo, ordered=True)
+# Ordenar os verbos com base na frequência na categoria selecionada
+if categoria_ordem:
+    ordenacao = (
+        filtered_df[filtered_df["Categoria"] == categoria_ordem]
+        .groupby("Keyword")["Frequency"]
+        .sum()
+        .sort_values(ascending=False)
+        .index
+    )
+    filtered_df["Keyword"] = pd.Categorical(filtered_df["Keyword"], categories=ordenacao, ordered=True)
 
 # Garantir que as categorias estejam na ordem correta
 categoria_order = sorted(filtered_df['Categoria'].unique())  # Ajuste se quiser uma ordem personalizada

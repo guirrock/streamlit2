@@ -51,32 +51,16 @@ keywords = st.sidebar.multiselect(
     key="keywords"  # Chave única para os verbos
 )
 
-# Adicionar uma opção para o usuário escolher a categoria de ordenação
-categoria_ordem = st.sidebar.selectbox(
-    "Selecione a categoria para ordenar os verbos:",
-    options=categorias,
-    key="categoria_ordem"
-)
-
 # Filtrar os dados com base nas escolhas do usuário
 filtered_df = freq_df[
     (freq_df["Categoria"].isin(categorias)) &
     (freq_df["Keyword"].isin(keywords))
 ]
 
-# Ordenar os verbos com base na frequência na categoria selecionada
-if categoria_ordem:
-    ordenacao = (
-        filtered_df[filtered_df["Categoria"] == categoria_ordem]
-        .groupby("Keyword")["Frequency"]
-        .sum()
-        .sort_values(ascending=False)
-        .index
-    )
-    filtered_df["Keyword"] = pd.Categorical(filtered_df["Keyword"], categories=ordenacao, ordered=True)
+# Ordenar as categorias de forma explícita
+categoria_order = sorted(filtered_df['Categoria'].unique())  # Ajuste se quiser uma ordem personalizada
 
 # Garantir que as categorias estejam na ordem correta
-categoria_order = sorted(filtered_df['Categoria'].unique())  # Ajuste se quiser uma ordem personalizada
 filtered_df['Categoria'] = pd.Categorical(filtered_df['Categoria'], categories=categoria_order, ordered=True)
 
 # Heatmap interativo
@@ -94,7 +78,6 @@ fig.update_layout(margin=dict(l=40, r=40, t=40, b=40))
 
 # Mostrar o gráfico
 st.plotly_chart(fig, use_container_width=True)
-
 # Supondo que 'df' seja o DataFrame original que contém as questões
 selected_keyword = st.selectbox(
     "Selecione um verbo para visualizar as questões:",

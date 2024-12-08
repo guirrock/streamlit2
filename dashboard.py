@@ -26,7 +26,7 @@ min_occurencias = st.sidebar.number_input(
     min_value=1,
     value=5,
     step=1,
-    key="min_occurencias"  # Adicionando uma chave única
+    key="min_occurencias"
 )
 
 # Calcular a frequência total de cada verbo em todas as categorias
@@ -40,7 +40,7 @@ categorias = st.sidebar.multiselect(
     "Selecione as Categorias:",
     options=freq_df["Categoria"].unique(),
     default=freq_df["Categoria"].unique(),
-    key="categorias"  # Chave única para as categorias
+    key="categorias"
 )
 
 # Exibir o filtro para os verbos (usando apenas os verbos filtrados)
@@ -48,7 +48,7 @@ keywords = st.sidebar.multiselect(
     "Selecione os Verbos (Palavras-Chave):",
     options=verbos_filtrados,
     default=verbos_filtrados,
-    key="keywords"  # Chave única para os verbos
+    key="keywords"
 )
 
 # Filtrar os dados com base nas escolhas do usuário
@@ -57,15 +57,17 @@ filtered_df = freq_df[
     (freq_df["Keyword"].isin(keywords))
 ]
 
-# Opção para o usuário escolher a coluna de ordenação
-coluna_ordenacao = st.sidebar.selectbox(
-    "Ordenar dados por:",
-    options=["Keyword", "Categoria", "Frequency"],  # Adicione outras colunas se necessário
-    key="coluna_ordenacao"
+# Opção para o usuário escolher a ordenação das categorias
+categoria_ordem = st.sidebar.selectbox(
+    "Ordenar Categorias por:",
+    options=["BT1", "BT2", "BT3", "BT4", "BT5", "BT6"],  # Substitua com as categorias reais
+    key="categoria_ordem"
 )
 
-# Ordenar os dados com base na seleção do usuário
-filtered_df = filtered_df.sort_values(by=coluna_ordenacao, ascending=True)
+# Garantir que as categorias estejam ordenadas de acordo com a escolha do usuário
+filtered_df['Categoria'] = pd.Categorical(filtered_df['Categoria'], 
+                                           categories=[categoria_ordem] + [cat for cat in categorias if cat != categoria_ordem],
+                                           ordered=True)
 
 # Heatmap interativo
 fig = px.density_heatmap(

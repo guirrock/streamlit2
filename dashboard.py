@@ -57,11 +57,15 @@ filtered_df = freq_df[
     (freq_df["Keyword"].isin(keywords))
 ]
 
-# Ordenar as categorias de forma explícita
-categoria_order = sorted(filtered_df['Categoria'].unique())  # Ajuste se quiser uma ordem personalizada
+# Opção para o usuário escolher a coluna de ordenação
+coluna_ordenacao = st.sidebar.selectbox(
+    "Ordenar dados por:",
+    options=["Keyword", "Categoria", "Frequency"],  # Adicione outras colunas se necessário
+    key="coluna_ordenacao"
+)
 
-# Garantir que as categorias estejam na ordem correta
-filtered_df['Categoria'] = pd.Categorical(filtered_df['Categoria'], categories=categoria_order, ordered=True)
+# Ordenar os dados com base na seleção do usuário
+filtered_df = filtered_df.sort_values(by=coluna_ordenacao, ascending=True)
 
 # Heatmap interativo
 fig = px.density_heatmap(
@@ -78,6 +82,7 @@ fig.update_layout(margin=dict(l=40, r=40, t=40, b=40))
 
 # Mostrar o gráfico
 st.plotly_chart(fig, use_container_width=True)
+
 # Supondo que 'df' seja o DataFrame original que contém as questões
 selected_keyword = st.selectbox(
     "Selecione um verbo para visualizar as questões:",
@@ -97,4 +102,3 @@ if not exemplos.empty:
         st.write(f"**Questão**: {row['Questões']}")  # Use a coluna original de 'Questões'
 else:
     st.write("Não foram encontradas questões para esse verbo.")
-

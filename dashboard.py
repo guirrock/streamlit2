@@ -5,9 +5,6 @@ import plotly.express as px
 # Carregar os dados de frequências de palavras-chave
 freq_df = pd.read_csv('freq_df.csv')
 
-file_path = 'blooms_taxonomy_dataset_pt_br.csv'
-df = pd.read_csv(file_path)
-
 # Configuração do Streamlit
 st.set_page_config(
     page_title="Dashboard de Palavras-Chave",
@@ -51,16 +48,35 @@ keywords = st.sidebar.multiselect(
     key="keywords"  # Chave única para os verbos
 )
 
+# Filtro para escolha da categoria de ordenação
+categoria_ordenacao = st.sidebar.selectbox(
+    "Escolha a categoria para ordenação dos verbos:",
+    options=freq_df["Categoria"].unique(),
+    key="categoria_ordenacao"  # Chave única para a categoria de ordenação
+)
+
 # Filtrar os dados com base nas escolhas do usuário
 filtered_df = freq_df[
     (freq_df["Categoria"].isin(categorias)) &
     (freq_df["Keyword"].isin(keywords))
 ]
 
+# Ordenar os verbos com base na frequência da categoria escolhida
+if categoria_ordenacao:
+    ordenacao = (
+        filtered_df[filtered_df["Categoria"] == categoria_ordenacao]
+        .sort_values("Frequency", ascending=False)
+        .set_index("Keyword")
+    )
+    ordered_keywords = ordenacao.index.tolist()
+else:
+    ordered_keywords = filtered_df["Keyword"].unique().tolist()
+
+# Garantir que os verbos estão na ordem correta
+filtered_df["Keyword"] = pd.Categorical(filtered_df["Keyword"], categories=ordered_keywords, ordered=True)
+
 # Ordenar as categorias de forma explícita
 categoria_order = sorted(filtered_df['Categoria'].unique())  # Ajuste se quiser uma ordem personalizada
-
-# Garantir que as categorias estejam na ordem correta
 filtered_df['Categoria'] = pd.Categorical(filtered_df['Categoria'], categories=categoria_order, ordered=True)
 
 # Heatmap interativo
@@ -78,12 +94,14 @@ fig.update_layout(margin=dict(l=40, r=40, t=40, b=40))
 
 # Mostrar o gráfico
 st.plotly_chart(fig, use_container_width=True)
+
 # Supondo que 'df' seja o DataFrame original que contém as questões
 selected_keyword = st.selectbox(
     "Selecione um verbo para visualizar as questões:",
     options=verbos_filtrados,
     key="selected_keyword"
 )
+
 
 # Filtrar o DataFrame original 'df' para obter as questões relacionadas ao verbo selecionado
 exemplos = df[df["Questões"].str.contains(selected_keyword, na=False)]

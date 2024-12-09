@@ -66,6 +66,7 @@ filtered_df = freq_df[
 
 # Criar uma coluna auxiliar para ordenação baseada na categoria de referência
 if categoria_referencia:
+    # Calcular a ordem com base na frequência da categoria de referência
     ordenacao = (
         filtered_df[filtered_df["Categoria"] == categoria_referencia]
         .groupby("Keyword")["Frequency"]

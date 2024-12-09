@@ -26,7 +26,7 @@ min_occurencias = st.sidebar.number_input(
     min_value=1,
     value=5,
     step=1,
-    key="min_occurencias"  # Adicionando uma chave única
+    key="min_occurencias"
 )
 
 # Calcular a frequência total de cada verbo em todas as categorias
@@ -40,7 +40,7 @@ categorias = st.sidebar.multiselect(
     "Selecione as Categorias:",
     options=freq_df["Categoria"].unique(),
     default=freq_df["Categoria"].unique(),
-    key="categorias"  # Chave única para as categorias
+    key="categorias"
 )
 
 # Exibir o filtro para os verbos (usando apenas os verbos filtrados)
@@ -48,7 +48,7 @@ keywords = st.sidebar.multiselect(
     "Selecione os Verbos (Palavras-Chave):",
     options=verbos_filtrados,
     default=verbos_filtrados,
-    key="keywords"  # Chave única para os verbos
+    key="keywords"
 )
 
 # Filtrar os dados com base nas escolhas do usuário
@@ -57,11 +57,22 @@ filtered_df = freq_df[
     (freq_df["Keyword"].isin(keywords))
 ]
 
-# Ordenar as categorias de forma explícita
-categoria_order = sorted(filtered_df['Categoria'].unique())  # Ajuste se quiser uma ordem personalizada
+# Adicionar opção para escolher a categoria de ordenação
+categoria_referencia = st.sidebar.selectbox(
+    "Selecione a categoria para ordenar os verbos:",
+    options=freq_df["Categoria"].unique(),
+    key="categoria_referencia"
+)
 
-# Garantir que as categorias estejam na ordem correta
-filtered_df['Categoria'] = pd.Categorical(filtered_df['Categoria'], categories=categoria_order, ordered=True)
+# Ordenar os verbos com base na categoria de referência
+if categoria_referencia:
+    ordenacao = (
+        filtered_df[filtered_df["Categoria"] == categoria_referencia]
+        .sort_values(by="Frequency", ascending=False)
+        ["Keyword"]
+        .tolist()
+    )
+    filtered_df["Keyword"] = pd.Categorical(filtered_df["Keyword"], categories=ordenacao, ordered=True)
 
 # Heatmap interativo
 fig = px.density_heatmap(
@@ -78,7 +89,8 @@ fig.update_layout(margin=dict(l=40, r=40, t=40, b=40))
 
 # Mostrar o gráfico
 st.plotly_chart(fig, use_container_width=True)
-# Supondo que 'df' seja o DataFrame original que contém as questões
+
+# Selecionar verbo para visualizar questões relacionadas
 selected_keyword = st.selectbox(
     "Selecione um verbo para visualizar as questões:",
     options=verbos_filtrados,

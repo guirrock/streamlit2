@@ -52,7 +52,7 @@ keywords = st.sidebar.multiselect(
 )
 
 # Filtrar os dados com base nas escolhas do usuário
-filtered_df = freq_df[
+filtered_df = verbos_frequentes[
     (freq_df["Categoria"].isin(categorias)) &
     (freq_df["Keyword"].isin(keywords))
 ]

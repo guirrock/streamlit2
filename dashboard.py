@@ -26,7 +26,7 @@ min_occurencias = st.sidebar.number_input(
     min_value=1,
     value=5,
     step=1,
-    key="min_occurencias"  # Adicionando uma chave única
+    key="min_occurencias"
 )
 
 # Calcular a frequência total de cada verbo em todas as categorias
@@ -40,7 +40,7 @@ categorias = st.sidebar.multiselect(
     "Selecione as Categorias:",
     options=freq_df["Categoria"].unique(),
     default=freq_df["Categoria"].unique(),
-    key="categorias"  # Chave única para as categorias
+    key="categorias"
 )
 
 # Exibir o filtro para os verbos (usando apenas os verbos filtrados)
@@ -48,14 +48,14 @@ keywords = st.sidebar.multiselect(
     "Selecione os Verbos (Palavras-Chave):",
     options=verbos_filtrados,
     default=verbos_filtrados,
-    key="keywords"  # Chave única para os verbos
+    key="keywords"
 )
 
-# Exibir a opção de seleção de categoria para ordenação
-categoria_para_ordenar = st.sidebar.selectbox(
-    "Selecione a Categoria para Ordenação:",
-    options=freq_df["Categoria"].unique(),
-    key="categoria_para_ordenar"
+# Filtro adicional para seleção da categoria de ordenação
+categoria_referencia = st.sidebar.selectbox(
+    "Escolha a categoria para ordenação dos verbos:",
+    options=categorias,
+    key="categoria_referencia"
 )
 
 # Filtrar os dados com base nas escolhas do usuário
@@ -64,18 +64,20 @@ filtered_df = freq_df[
     (freq_df["Keyword"].isin(keywords))
 ]
 
-# Ordenar os verbos com base na frequência da categoria selecionada
-if categoria_para_ordenar in freq_df["Categoria"].unique():
-    ordenacao_verbo = (
-        filtered_df[filtered_df["Categoria"] == categoria_para_ordenar]
-        .sort_values(by="Frequency", ascending=False)["Keyword"]
-        .tolist()
+# Criar uma coluna auxiliar para ordenação baseada na categoria de referência
+if categoria_referencia:
+    ordenacao = (
+        filtered_df[filtered_df["Categoria"] == categoria_referencia]
+        .groupby("Keyword")["Frequency"]
+        .sum()
+        .sort_values(ascending=False)
     )
-    filtered_df["Keyword"] = pd.Categorical(filtered_df["Keyword"], categories=ordenacao_verbo, ordered=True)
-
-# Garantir que as categorias estejam na ordem correta
-categoria_order = sorted(filtered_df['Categoria'].unique())  # Ajuste se quiser uma ordem personalizada
-filtered_df['Categoria'] = pd.Categorical(filtered_df['Categoria'], categories=categoria_order, ordered=True)
+    # Aplicar a ordem ao DataFrame filtrado
+    filtered_df["Keyword"] = pd.Categorical(
+        filtered_df["Keyword"],
+        categories=ordenacao.index,
+        ordered=True
+    )
 
 # Heatmap interativo
 fig = px.density_heatmap(
@@ -84,7 +86,7 @@ fig = px.density_heatmap(
     y="Categoria",
     z="Frequency",
     color_continuous_scale='Viridis',
-    title="Heatmap de Frequências por Nível da Taxonomia e Verbo",
+    title=f"Heatmap de Frequências por Nível da Taxonomia e Verbo (Ordenado por {categoria_referencia})",
 )
 
 # Layout do Heatmap
@@ -93,22 +95,20 @@ fig.update_layout(margin=dict(l=40, r=40, t=40, b=40))
 # Mostrar o gráfico
 st.plotly_chart(fig, use_container_width=True)
 
-# Supondo que 'df' seja o DataFrame original que contém as questões
+# Exibir questões relacionadas ao verbo selecionado
 selected_keyword = st.selectbox(
     "Selecione um verbo para visualizar as questões:",
     options=verbos_filtrados,
     key="selected_keyword"
 )
 
-# Filtrar o DataFrame original 'df' para obter as questões relacionadas ao verbo selecionado
 exemplos = df[df["Questões"].str.contains(selected_keyword, na=False)]
 
-# Exibir as questões relacionadas ao verbo
 st.subheader(f"Exemplos de questões com o verbo '{selected_keyword}'")
 
 if not exemplos.empty:
     for _, row in exemplos.iterrows():
         st.write(f"**Categoria**: {row['Categoria']}")
-        st.write(f"**Questão**: {row['Questões']}")  # Use a coluna original de 'Questões'
+        st.write(f"**Questão**: {row['Questões']}")
 else:
     st.write("Não foram encontradas questões para esse verbo.")

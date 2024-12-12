@@ -67,10 +67,10 @@ perguntas_filtradas = perguntas_df[
     (perguntas_df['Categoria'] == selected_category)
 ]
 
-# Exibir as perguntas
+# Exibir as perguntas filtradas
 if not perguntas_filtradas.empty:
     st.subheader('Perguntas encontradas:')
     for index, row in perguntas_filtradas.iterrows():
-        st.write(f"- {row['Pergunta']}")
+        st.write(f"- {row['Questões']}")  # Corrigir para 'Questões' ao invés de 'Pergunta'
 else:
     st.write("Nenhuma pergunta encontrada para o verbo e categoria selecionados.")

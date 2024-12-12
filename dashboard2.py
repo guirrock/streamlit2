@@ -71,8 +71,8 @@ perguntas_filtradas = perguntas_df[
 if not perguntas_filtradas.empty:
     st.subheader('Perguntas encontradas:')
     for index, row in perguntas_filtradas.iterrows():
-        # Destacar o verbo em negrito nas perguntas
-        pergunta_destacada = row['Questões'].replace(selected_verb, f"**{selected_verb}**", case=False)
+        # Usar re.sub para substituir o verbo por ele em negrito, com insensibilidade a maiúsculas/minúsculas
+        pergunta_destacada = re.sub(rf'\b{re.escape(selected_verb)}\b', f"**{selected_verb}**", row['Questões'], flags=re.IGNORECASE)
         st.markdown(f"- {pergunta_destacada}")
 else:
     st.write("Nenhuma pergunta encontrada para o verbo e categoria selecionados.")

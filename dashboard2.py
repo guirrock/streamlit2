@@ -3,7 +3,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 # Carregar o CSV
-df = pd.read_csv("freq_df.csv", delimiter="\t")
+df = pd.read_csv("freq_df.csv")
 
 # Criando uma tabela de contagem para cada verbo em cada categoria
 pivot_df = df.pivot_table(index='Categoria', columns='Keyword', values='Frequency', aggfunc='sum', fill_value=0)

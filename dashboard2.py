@@ -30,6 +30,10 @@ frequencias_categoria = df_filtered[df_filtered['Categoria'] == categoria_seleci
 # Reordenando as colunas do heatmap com base nas frequências da categoria selecionada
 pivot_df_filtered = pivot_df_filtered[frequencias_categoria.index]
 
+# Garantindo que as categorias apareçam na ordem correta (BT1, BT2, ...)
+categorias_ordenadas = ['BT1', 'BT2', 'BT3', 'BT4', 'BT5', 'BT6']  # Ordem desejada das categorias
+pivot_df_filtered = pivot_df_filtered[categorias_ordenadas]  # Reordenando as categorias
+
 # Criando o heatmap com Plotly
 fig = go.Figure(data=go.Heatmap(
     z=pivot_df_filtered.values,  # Frequências
@@ -44,7 +48,7 @@ fig.update_layout(
     xaxis_title='Verbos',
     yaxis_title='Categorias da Taxonomia de Bloom',
     xaxis={'tickangle': 45},  # Rotacionando os rótulos dos verbos para melhor visualização
-    yaxis={'categoryorder': 'total ascending'}  # Ordenando as categorias
+    yaxis={'categoryorder': 'array', 'categoryarray': categorias_ordenadas},  # Garantindo a ordem das categorias
 )
 
 # Exibindo o gráfico no Streamlit

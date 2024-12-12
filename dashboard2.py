@@ -75,7 +75,17 @@ with col1:
 
 # Coluna 2 (controles)
 with col2:
-    # Filtros adicionais para as perguntas
+    # Apenas o filtro "Escolha os verbos" estará ao lado do gráfico
+    st.subheader("Filtros para o Heatmap")
+    
+    # Opção para o usuário escolher a categoria para ordenar os verbos no eixo X
+    categorias = df['Categoria'].unique()  # Obtém as categorias únicas no dataframe
+    categoria_selecionada = st.selectbox('Escolha a categoria para ordenar os verbos:', categorias)
+
+    # Opção para o usuário inserir o número mínimo de vezes que cada verbo deve aparecer
+    min_freq = st.number_input('Número mínimo de aparições dos verbos no heatmap:', min_value=1, value=1, step=1)
+
+    # Filtros para as perguntas
     st.subheader("Filtros para Perguntas")
 
     # Selecione um verbo e categoria para exibir as perguntas

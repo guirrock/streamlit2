@@ -2,7 +2,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 import wordtree
-from wordtree import WordTree
+import WordTree
 
 # Carregar o dataset das perguntas
 df_perguntas = pd.read_csv("blooms_taxonomy_dataset_pt_br.csv")

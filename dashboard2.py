@@ -71,6 +71,6 @@ perguntas_filtradas = perguntas_df[
 if not perguntas_filtradas.empty:
     st.subheader('Perguntas encontradas:')
     pergunta_destacada = row['Questões'].replace(selected_verb, f"<mark>{selected_verb}</mark>")
-        st.markdown(f"- {pergunta_destacada}", unsafe_allow_html=True)
+    st.markdown(f"- {pergunta_destacada}", unsafe_allow_html=True)
 else:
     st.write("Nenhuma pergunta encontrada para o verbo e categoria selecionados.")

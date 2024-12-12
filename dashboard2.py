@@ -62,10 +62,12 @@ selected_verb = st.selectbox('Escolha um verbo:', pivot_df_filtered.columns)
 selected_category = st.selectbox('Escolha uma categoria de Bloom:', categorias_ordenadas)
 
 # Filtrar as perguntas que contêm o verbo selecionado (com str.contains) e a categoria de Bloom selecionada
-perguntas_filtradas = perguntas_df[
-    perguntas_df['Questões'].str.contains(r'\b' + re.escape(selected_verb) + r'\b', case=False, na=False)
-    & perguntas_df['Categoria'].str.contains(selected_category)
-]
+if selected_verb:
+    # Filtrar as perguntas que contêm o verbo exato selecionado e a categoria
+    perguntas_filtradas = perguntas_df[
+        perguntas_df['Questões'].str.contains(r'\b' + re.escape(selected_verb) + r'\b', case=False, na=False)
+        & perguntas_df['Categoria'].str.contains(selected_category)
+    ]
 
 # Exibir as perguntas filtradas
 if not perguntas_filtradas.empty:

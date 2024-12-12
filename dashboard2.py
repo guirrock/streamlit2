@@ -55,8 +55,6 @@ fig.update_layout(
     yaxis={'categoryorder': 'array', 'categoryarray': categorias_ordenadas},  # Garantindo a ordem das categorias
 )
 
-fig.update_traces(text=pivot_df_filtered.values, texttemplate="%{text}", hoverinfo="text")
-
 # Exibindo o gráfico no Streamlit
 st.plotly_chart(fig)
 

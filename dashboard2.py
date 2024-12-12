@@ -16,36 +16,35 @@ pivot_df = df.pivot_table(index='Categoria', columns='Keyword', values='Frequenc
 
 # Título do dashboard
 st.title('Heatmap de Frequência de Verbos por Nível da Taxonomia de Bloom')
-with col2:
-    # Opção para o usuário escolher a categoria para ordenar os verbos no eixo X
-    categorias = df['Categoria'].unique()  # Obtém as categorias únicas no dataframe
-    categoria_selecionada = st.selectbox('Escolha a categoria para ordenar os verbos:', categorias)
-    
-    # Opção para o usuário inserir o número mínimo de vezes que cada verbo deve aparecer
-    min_freq = st.number_input('Número mínimo de aparições dos verbos no heatmap:', min_value=1, value=1, step=1)
-    
-    # Filtrando os verbos com base na frequência mínima
-    df_filtered = df.groupby('Keyword').filter(lambda x: x['Frequency'].sum() >= min_freq)
-    
-    # Criando uma nova tabela de contagem para os verbos filtrados
-    pivot_df_filtered = df_filtered.pivot_table(index='Categoria', columns='Keyword', values='Frequency', aggfunc='sum', fill_value=0)
-    
-    # Ordenando os verbos na categoria selecionada
-    frequencias_categoria = df_filtered[df_filtered['Categoria'] == categoria_selecionada].groupby('Keyword')['Frequency'].sum().sort_values(ascending=False)
-    
-    # Reordenando as colunas do heatmap com base nas frequências da categoria selecionada
-    pivot_df_filtered = pivot_df_filtered[frequencias_categoria.index]
-    
-    # Garantindo que todas as categorias da Taxonomia de Bloom sejam exibidas
-    categorias_ordenadas = ['BT1', 'BT2', 'BT3', 'BT4', 'BT5', 'BT6']  # Ordem desejada das categorias
-    
-    # Se a categoria não estiver presente, adicioná-la com zeros
-    pivot_df_filtered = pivot_df_filtered.reindex(categorias_ordenadas, axis=0, fill_value=0)
 
-with col1:
-    # Opção para o usuário selecionar quais verbos exibir no heatmap
-    verbos_disponiveis = list(pivot_df_filtered.columns)
-    verbos_selecionados = st.multiselect('Escolha os verbos que deseja exibir no heatmap:', verbos_disponiveis, default=verbos_disponiveis)
+# Opção para o usuário escolher a categoria para ordenar os verbos no eixo X
+categorias = df['Categoria'].unique()  # Obtém as categorias únicas no dataframe
+categoria_selecionada = st.selectbox('Escolha a categoria para ordenar os verbos:', categorias)
+
+# Opção para o usuário inserir o número mínimo de vezes que cada verbo deve aparecer
+min_freq = st.number_input('Número mínimo de aparições dos verbos no heatmap:', min_value=1, value=1, step=1)
+
+# Filtrando os verbos com base na frequência mínima
+df_filtered = df.groupby('Keyword').filter(lambda x: x['Frequency'].sum() >= min_freq)
+
+# Criando uma nova tabela de contagem para os verbos filtrados
+pivot_df_filtered = df_filtered.pivot_table(index='Categoria', columns='Keyword', values='Frequency', aggfunc='sum', fill_value=0)
+
+# Ordenando os verbos na categoria selecionada
+frequencias_categoria = df_filtered[df_filtered['Categoria'] == categoria_selecionada].groupby('Keyword')['Frequency'].sum().sort_values(ascending=False)
+
+# Reordenando as colunas do heatmap com base nas frequências da categoria selecionada
+pivot_df_filtered = pivot_df_filtered[frequencias_categoria.index]
+
+# Garantindo que todas as categorias da Taxonomia de Bloom sejam exibidas
+categorias_ordenadas = ['BT1', 'BT2', 'BT3', 'BT4', 'BT5', 'BT6']  # Ordem desejada das categorias
+
+# Se a categoria não estiver presente, adicioná-la com zeros
+pivot_df_filtered = pivot_df_filtered.reindex(categorias_ordenadas, axis=0, fill_value=0)
+
+# Opção para o usuário selecionar quais verbos exibir no heatmap
+verbos_disponiveis = list(pivot_df_filtered.columns)
+verbos_selecionados = st.multiselect('Escolha os verbos que deseja exibir no heatmap:', verbos_disponiveis, default=verbos_disponiveis)
 
 # Filtra o dataframe com base nos verbos selecionados
 pivot_df_filtered = pivot_df_filtered[verbos_selecionados]

@@ -55,6 +55,12 @@ fig = go.Figure(data=go.Heatmap(
     x=pivot_df_filtered.columns,  # Verbos (colunas)
     y=pivot_df_filtered.index,  # Categorias (linhas)
     colorscale='Viridis',  # Escala de cores
+    hovertemplate=(
+        'Verbo: %{x}<br>'  # Exibe o verbo no eixo X
+        'Categoria: %{y}<br>'  # Exibe a categoria no eixo Y
+        'Frequência: %{z}<br>'  # Exibe a frequência no eixo Z
+        '<extra></extra>'  # Remove a legenda extra padrão do tooltip
+    ),
 ))
 
 # Adicionando título e rótulos ao gráfico

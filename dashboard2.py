@@ -3,41 +3,18 @@ import plotly.graph_objects as go
 import streamlit as st
 import re
 
-# Personalizando o fundo dos widgets e o layout usando CSS
+# Adicionando o CSS personalizado para o multiselect
 st.markdown("""
     <style>
-        /* Cor de fundo geral da aplicação */
-        .reportview-container {
-            background-color: #F0F7FF; /* Azul muito suave de fundo */
-        }
-        
-        /* Cor de fundo do campo de seleção */
-        .stSelectbox, .stNumberInput, .stSlider {
-            background-color: #D9E8FF; /* Azul suave mais claro */
-            border-radius: 8px;
-        }
-
-        /* Cor de fundo da barra de título */
-        .css-18e3th9 {
-            background-color: #1F76D2; /* Azul mais escuro para o título */
-            color: white;
-        }
-
-        /* Alterando a cor de fundo da sidebar se necessário */
-        .sidebar .sidebar-content {
-            background-color: #1F76D2;
-        }
-        
-        /* Ajustando o estilo da cor de fundo do botão */
-        .stButton button {
-            background-color: #1F76D2;
-            color: white;
-        }
-
-        /* Melhorando a cor do texto das opções */
-        .stSelectbox div[data-baseweb="select"] {
-            color: #1F76D2;
-        }
+    .stMultiSelect div[role="listbox"] {
+        background-color: #E6F0F9; /* Cor de fundo azul clara semelhante ao "Blues" */
+    }
+    .stMultiSelect div[role="option"] {
+        background-color: #cce0ff;  /* Cor azul para as opções */
+    }
+    .stMultiSelect div[role="option"]:hover {
+        background-color: #99c2ff; /* Cor azul mais clara ao passar o mouse */
+    }
     </style>
 """, unsafe_allow_html=True)
 

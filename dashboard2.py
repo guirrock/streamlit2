@@ -1,7 +1,7 @@
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
-import wordtree
+import re
 
 # Carregar os arquivos de dados
 df = pd.read_csv("freq_df.csv")
@@ -38,6 +38,13 @@ categorias_ordenadas = ['BT1', 'BT2', 'BT3', 'BT4', 'BT5', 'BT6']  # Ordem desej
 # Se a categoria não estiver presente, adicioná-la com zeros
 pivot_df_filtered = pivot_df_filtered.reindex(categorias_ordenadas, axis=0, fill_value=0)
 
+# Opção para o usuário selecionar quais verbos exibir no heatmap
+verbos_disponiveis = list(pivot_df_filtered.columns)
+verbos_selecionados = st.multiselect('Escolha os verbos que deseja exibir no heatmap:', verbos_disponiveis, default=verbos_disponiveis)
+
+# Filtra o dataframe com base nos verbos selecionados
+pivot_df_filtered = pivot_df_filtered[verbos_selecionados]
+
 # Criando o heatmap com Plotly
 fig = go.Figure(data=go.Heatmap(
     z=pivot_df_filtered.values,  # Frequências
@@ -59,7 +66,7 @@ fig.update_layout(
 st.plotly_chart(fig)
 
 # Selecione um verbo e categoria para exibir as perguntas
-selected_verb = st.selectbox('Escolha um verbo:', pivot_df_filtered.columns)
+selected_verb = st.selectbox('Escolha um verbo:', verbos_selecionados)
 selected_category = st.selectbox('Escolha uma categoria de Bloom:', categorias_ordenadas)
 
 # Filtrar as perguntas que contêm o verbo selecionado (com str.contains) e a categoria de Bloom selecionada
@@ -75,7 +82,7 @@ if not perguntas_filtradas.empty:
         # Verificar se a 'Questões' não é NaN e é uma string
         if isinstance(row['Questões'], str):
             # Destacar o verbo na pergunta
-            pergunta_destacada = row['Questões'].replace(selected_verb, f"<mark>{selected_verb}</mark>")
+            pergunta_destacada = re.sub(rf'\b{selected_verb}\b', f"<mark>{selected_verb}</mark>", row['Questões'], flags=re.IGNORECASE)
             st.markdown(f"- {pergunta_destacada}", unsafe_allow_html=True)
 else:
     st.write("Nenhuma pergunta encontrada para o verbo e categoria selecionados.")

@@ -11,6 +11,9 @@ def prepare_heatmap_data(df, sort_by):
     # Pivotar os dados
     pivot_df = df.pivot(index='Categoria', columns='Keyword', values='Frequency').fillna(0)
 
+    # Garantir que todas as categorias sejam preservadas no índice
+    pivot_df = pivot_df.reindex(df['Categoria'].unique(), fill_value=0)
+
     # Reordenar as colunas com base na categoria selecionada
     if sort_by in pivot_df.index:
         pivot_df = pivot_df.loc[:, pivot_df.loc[sort_by].sort_values(ascending=False).index]

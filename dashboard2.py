@@ -70,7 +70,11 @@ perguntas_filtradas = perguntas_df[
 # Exibir as perguntas filtradas
 if not perguntas_filtradas.empty:
     st.subheader('Perguntas encontradas:')
-    pergunta_destacada = row['Questões'].replace(selected_verb, f"<mark>{selected_verb}</mark>")
-    st.write(f"- {pergunta_destacada}")
+    for index, row in perguntas_filtradas.iterrows():
+        # Verificar se a 'Questões' não é NaN e é uma string
+        if isinstance(row['Questões'], str):
+            # Destacar o verbo na pergunta
+            pergunta_destacada = row['Questões'].replace(selected_verb, f"<mark>{selected_verb}</mark>")
+            st.markdown(f"- {pergunta_destacada}", unsafe_allow_html=True)
 else:
     st.write("Nenhuma pergunta encontrada para o verbo e categoria selecionados.")

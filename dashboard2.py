@@ -3,20 +3,6 @@ import plotly.graph_objects as go
 import streamlit as st
 import re
 
-# Adicionando o CSS personalizado para o multiselect
-st.markdown("""
-    <style>
-    .stMultiSelect div[role="listbox"] {
-        background-color: #E6F0F9; /* Cor de fundo azul clara semelhante ao "Blues" */
-    }
-    .stMultiSelect div[role="option"] {
-        background-color: #cce0ff;  /* Cor azul para as opções */
-    }
-    .stMultiSelect div[role="option"]:hover {
-        background-color: #99c2ff; /* Cor azul mais clara ao passar o mouse */
-    }
-    </style>
-""", unsafe_allow_html=True)
 
 # Carregar os arquivos de dados
 df = pd.read_csv("freq_df.csv")
@@ -65,7 +51,7 @@ fig = go.Figure(data=go.Heatmap(
     z=pivot_df_filtered.values,  # Frequências
     x=pivot_df_filtered.columns,  # Verbos (colunas)
     y=pivot_df_filtered.index,  # Categorias (linhas)
-    colorscale='Blues',  # Escala de cores
+    colorscale='Reds',  # Escala de cores
     hovertemplate=(
         'Verbo: %{x}<br>'  # Exibe o verbo no eixo X
         'Categoria: %{y}<br>'  # Exibe a categoria no eixo Y

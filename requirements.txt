@@ -3,4 +3,3 @@ pandas
 spacy
 plotly
 wordtree
-WordTree

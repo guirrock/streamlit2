@@ -46,7 +46,7 @@ fig.update_layout(
     coloraxis_colorbar=dict(title="Frequência"),
     height=600  # Ajustar a altura do gráfico
 )
-fig.update_layout(margin=dict(l=40, r=40, t=40, b=40))
+
 # Exibir o heatmap no Streamlit
 st.plotly_chart(fig)
 

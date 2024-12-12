@@ -23,6 +23,9 @@ if categoria_ref in heatmap_data.index:
     colunas_ordenadas = heatmap_data.loc[categoria_ref].sort_values(ascending=False).index
     heatmap_data = heatmap_data[colunas_ordenadas]
 
+# Garantir que todas as categorias sejam exibidas no eixo Y
+heatmap_data = heatmap_data.reindex(index=categorias)
+
 # Plotar o heatmap com Plotly
 st.write(f"Heatmap com ordenação baseada na categoria: {categoria_ref}")
 fig = px.imshow(heatmap_data, 

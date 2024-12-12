@@ -1,6 +1,43 @@
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
+import wordtree
+from wordtree import WordTree
+
+# Carregar o dataset das perguntas
+df_perguntas = pd.read_csv("blooms_taxonomy_dataset_pt_br.csv")
+
+# Exibindo título
+st.title("WordTree: Árvore de Verbos na Taxonomia de Bloom")
+
+# Solicitar ao usuário para digitar o verbo desejado
+verbo_digitado = st.text_input("Digite um verbo para ver a árvore de palavras:")
+
+if verbo_digitado:
+    # Filtrando as perguntas que contêm o verbo
+    perguntas_com_verbo = df_perguntas[df_perguntas['Pergunta'].str.contains(verbo_digitado, case=False, na=False)]
+
+    if not perguntas_com_verbo.empty:
+        # Exibindo as perguntas que contêm o verbo
+        st.subheader("Perguntas que contêm o verbo")
+        for pergunta in perguntas_com_verbo['Pergunta']:
+            st.write(f"- {pergunta}")
+        
+        # Criando a árvore de palavras
+        tree = WordTree()
+        
+        # Adicionando as perguntas ao wordtree
+        for pergunta in perguntas_com_verbo['Pergunta']:
+            tree.add_text(pergunta)
+        
+        # Exibindo o wordtree
+        st.subheader("Árvore de Palavras")
+        st.write(tree.to_html())
+        
+    else:
+        st.write("Nenhuma pergunta encontrada com o verbo digitado.")
+
+
 
 # Carregar o CSV
 df = pd.read_csv("freq_df.csv")

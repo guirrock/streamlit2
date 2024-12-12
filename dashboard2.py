@@ -5,25 +5,26 @@ import plotly.express as px
 # Carregar os dados de frequências de palavras-chave
 freq_df = pd.read_csv('freq_df.csv')
 
+# Transformar o DataFrame para formato adequado ao heatmap
+freq_pivot = freq_df.pivot(index='Categoria', columns='Keyword', values='Frequency').fillna(0)
+
 # Título do Dashboard
 st.title("Dashboard de Frequências de Verbos por Categoria da Taxonomia de Bloom")
 
 # Selecionar a categoria de referência para ordenação
 categoria_ref = st.selectbox(
     "Selecione a categoria da Taxonomia de Bloom para ordenar os verbos:",
-    options=freq_df.columns[1:],  # Supondo que a primeira coluna seja 'Verbos'
+    options=freq_pivot.index,
     index=0
 )
 
-# Ordenar os dados com base na categoria selecionada
-freq_df = freq_df.sort_values(by=categoria_ref, ascending=False)
+# Ordenar os verbos com base na categoria selecionada
+freq_pivot = freq_pivot.sort_values(by=categoria_ref, axis=1, ascending=False)
 
 # Criar o heatmap usando Plotly
 heatmap = px.imshow(
-    freq_df.iloc[:, 1:].T,  # Transpor para ter categorias no eixo Y e verbos no eixo X
+    freq_pivot,
     labels={"x": "Verbos", "y": "Categorias", "color": "Frequência"},
-    x=freq_df['Verbos'],
-    y=freq_df.columns[1:],
     color_continuous_scale="Viridis",
 )
 

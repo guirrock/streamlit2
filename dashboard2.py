@@ -3,9 +3,43 @@ import plotly.graph_objects as go
 import streamlit as st
 import re
 
-col1, col2 = st.columns(2)
+# Personalizando o fundo dos widgets e o layout usando CSS
+st.markdown("""
+    <style>
+        /* Cor de fundo geral da aplicação */
+        .reportview-container {
+            background-color: #F0F7FF; /* Azul muito suave de fundo */
+        }
+        
+        /* Cor de fundo do campo de seleção */
+        .stSelectbox, .stNumberInput, .stSlider {
+            background-color: #D9E8FF; /* Azul suave mais claro */
+            border-radius: 8px;
+        }
 
+        /* Cor de fundo da barra de título */
+        .css-18e3th9 {
+            background-color: #1F76D2; /* Azul mais escuro para o título */
+            color: white;
+        }
 
+        /* Alterando a cor de fundo da sidebar se necessário */
+        .sidebar .sidebar-content {
+            background-color: #1F76D2;
+        }
+        
+        /* Ajustando o estilo da cor de fundo do botão */
+        .stButton button {
+            background-color: #1F76D2;
+            color: white;
+        }
+
+        /* Melhorando a cor do texto das opções */
+        .stSelectbox div[data-baseweb="select"] {
+            color: #1F76D2;
+        }
+    </style>
+""", unsafe_allow_html=True)
 
 # Carregar os arquivos de dados
 df = pd.read_csv("freq_df.csv")

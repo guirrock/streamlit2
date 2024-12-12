@@ -63,7 +63,7 @@ selected_category = st.selectbox('Escolha uma categoria de Bloom:', categorias_o
 
 # Filtrar as perguntas que contêm o verbo selecionado (com str.contains) e a categoria de Bloom selecionada
 perguntas_filtradas = perguntas_df[
-    perguntas_df['Questões'].str.contains(r'\b' + selected_verb + r'\b', case=False, na=False)
+    perguntas_df['Questões'].str.contains(r'\b' + re.escape(selected_verb) + r'\b', case=False, na=False)
     & perguntas_df['Categoria'].str.contains(selected_category)
 ]
 

@@ -1,52 +1,16 @@
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
-import wordtree
-import WordTree
 
-# Carregar o dataset das perguntas
-df_perguntas = pd.read_csv("blooms_taxonomy_dataset_pt_br.csv")
-
-# Exibindo título
-st.title("WordTree: Árvore de Verbos na Taxonomia de Bloom")
-
-# Solicitar ao usuário para digitar o verbo desejado
-verbo_digitado = st.text_input("Digite um verbo para ver a árvore de palavras:")
-
-if verbo_digitado:
-    # Filtrando as perguntas que contêm o verbo
-    perguntas_com_verbo = df_perguntas[df_perguntas['Pergunta'].str.contains(verbo_digitado, case=False, na=False)]
-
-    if not perguntas_com_verbo.empty:
-        # Exibindo as perguntas que contêm o verbo
-        st.subheader("Perguntas que contêm o verbo")
-        for pergunta in perguntas_com_verbo['Pergunta']:
-            st.write(f"- {pergunta}")
-        
-        # Criando a árvore de palavras
-        tree = WordTree()
-        
-        # Adicionando as perguntas ao wordtree
-        for pergunta in perguntas_com_verbo['Pergunta']:
-            tree.add_text(pergunta)
-        
-        # Exibindo o wordtree
-        st.subheader("Árvore de Palavras")
-        st.write(tree.to_html())
-        
-    else:
-        st.write("Nenhuma pergunta encontrada com o verbo digitado.")
-
-
-
-# Carregar o CSV
+# Carregar os arquivos de dados
 df = pd.read_csv("freq_df.csv")
+perguntas_df = pd.read_csv("blooms_taxonomy_dataset_pt_br.csv")
 
 # Criando uma tabela de contagem para cada verbo em cada categoria
 pivot_df = df.pivot_table(index='Categoria', columns='Keyword', values='Frequency', aggfunc='sum', fill_value=0)
 
 # Título do dashboard
-st.title('Frequência de Verbos por Nível da Taxonomia de Bloom')
+st.title('Heatmap de Frequência de Verbos por Nível da Taxonomia de Bloom')
 
 # Opção para o usuário escolher a categoria para ordenar os verbos no eixo X
 categorias = df['Categoria'].unique()  # Obtém as categorias únicas no dataframe
@@ -83,7 +47,7 @@ fig = go.Figure(data=go.Heatmap(
 
 # Adicionando título e rótulos ao gráfico
 fig.update_layout(
-    title=f'Frequência de Verbos por Nível da Taxonomia de Bloom (Ordenado por {categoria_selecionada} e mínimo {min_freq} aparições)',
+    title=f'Heatmap de Frequência de Verbos por Nível da Taxonomia de Bloom (Ordenado por {categoria_selecionada} e mínimo {min_freq} aparições)',
     xaxis_title='Verbos',
     yaxis_title='Categorias da Taxonomia de Bloom',
     xaxis={'tickangle': 45},  # Rotacionando os rótulos dos verbos para melhor visualização
@@ -92,3 +56,18 @@ fig.update_layout(
 
 # Exibindo o gráfico no Streamlit
 st.plotly_chart(fig)
+
+# Selecione um verbo e categoria para exibir as perguntas
+selected_verb = st.selectbox('Escolha um verbo:', pivot_df_filtered.columns)
+selected_category = st.selectbox('Escolha uma categoria de Bloom:', categorias_ordenadas)
+
+# Filtrar as perguntas que utilizam o verbo e a categoria selecionados
+perguntas_filtradas = perguntas_df[(perguntas_df['Verbo'] == selected_verb) & (perguntas_df['Categoria'] == selected_category)]
+
+# Exibir as perguntas
+if not perguntas_filtradas.empty:
+    st.subheader('Perguntas encontradas:')
+    for index, row in perguntas_filtradas.iterrows():
+        st.write(f"- {row['Pergunta']}")
+else:
+    st.write("Nenhuma pergunta encontrada para o verbo e categoria selecionados.")

@@ -39,13 +39,14 @@ fig = px.imshow(
 )
 
 # Ajustar o layout para melhorar a legibilidade
+
 fig.update_layout(
     xaxis=dict(title="Verbos", tickangle=-45),
     yaxis=dict(title="Categorias"),
     coloraxis_colorbar=dict(title="Frequência"),
     height=600  # Ajustar a altura do gráfico
 )
-
+fig.update_layout(margin=dict(l=40, r=40, t=40, b=40))
 # Exibir o heatmap no Streamlit
 st.plotly_chart(fig)
 

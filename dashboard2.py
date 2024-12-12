@@ -3,11 +3,6 @@ import plotly.graph_objects as go
 import streamlit as st
 import wordtree
 
-documents = ["hello world", "world is my oyster"]
-g = wordtree.search_and_draw(corpus = documents, keyword = "world")
-g.render() # creates a file world.dv.png
-
-
 # Carregar os arquivos de dados
 df = pd.read_csv("freq_df.csv")
 perguntas_df = pd.read_csv("blooms_taxonomy_dataset_pt_br.csv")

@@ -72,7 +72,7 @@ fig.update_layout(
 # Exibindo o gráfico no Streamlit
 st.plotly_chart(fig)
 
-st.subheader('Filtrar perguntas por nível e verbo:')
+st.subheader('Filtrar perguntas por Verbo e Nível:')
 
 # Selecione um verbo e categoria para exibir as perguntas
 selected_verb = st.selectbox('Escolha um verbo:', verbos_selecionados)

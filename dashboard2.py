@@ -43,6 +43,7 @@ fig.update_layout(
     xaxis=dict(title="Verbos", tickangle=-45),
     yaxis=dict(title="Categorias"),
     coloraxis_colorbar=dict(title="Frequência"),
+    height=600  # Ajustar a altura do gráfico
 )
 
 # Exibir o heatmap no Streamlit

@@ -1,46 +1,50 @@
-import streamlit as st
 import pandas as pd
+import streamlit as st
 import plotly.express as px
 
-# Carregar os dados de frequências de palavras-chave
-freq_df = pd.read_csv('freq_df.csv')
+# Carregar o arquivo CSV
+file_path = 'freq_df.csv'  # Substituir pelo caminho real do arquivo se necessário
+freq_df = pd.read_csv(file_path)
 
-# Garantir que todas as categorias da Taxonomia de Bloom estão presentes
-categorias_bloom = ["BT1", "BT2", "BT3", "BT4", "BT5", "BT6"]
-freq_pivot = freq_df.pivot(index='Categoria', columns='Keyword', values='Frequency').reindex(categorias_bloom, fill_value=0)
+# Função para criar o DataFrame pivotado para o heatmap
+def prepare_heatmap_data(df, sort_by):
+    # Pivotar os dados
+    pivot_df = df.pivot(index='Categoria', columns='Keyword', values='Frequency').fillna(0)
 
-# Título do Dashboard
-st.title("Dashboard de Frequências de Verbos por Categoria da Taxonomia de Bloom")
+    # Reordenar as colunas com base na categoria selecionada
+    if sort_by in pivot_df.index:
+        pivot_df = pivot_df.loc[:, pivot_df.loc[sort_by].sort_values(ascending=False).index]
 
-# Selecionar a categoria de referência para ordenação
-categoria_ref = st.selectbox(
-    "Selecione a categoria da Taxonomia de Bloom para ordenar os verbos:",
-    options=categorias_bloom,
-    index=0
-)
+    return pivot_df
 
-# Ordenar os verbos com base na categoria selecionada
-freq_pivot = freq_pivot.sort_values(by=categoria_ref, axis=1, ascending=False)
+# Configurar o Streamlit
+st.title("Heatmap de Verbos por Categoria da Taxonomia de Bloom")
 
-# Criar o heatmap usando Plotly
-heatmap = px.imshow(
-    freq_pivot,
+# Opção para selecionar a categoria de referência
+categories = freq_df['Categoria'].unique()
+sort_by = st.selectbox("Selecione a categoria para ordenar os verbos:", categories)
+
+# Preparar os dados para o heatmap
+heatmap_data = prepare_heatmap_data(freq_df, sort_by)
+
+# Criar o heatmap com Plotly
+fig = px.imshow(
+    heatmap_data,
     labels={"x": "Verbos", "y": "Categorias", "color": "Frequência"},
     color_continuous_scale="Viridis",
+    title=f"Heatmap de Frequências Ordenado por {sort_by}",
 )
 
-# Configurar título e layout do heatmap
-heatmap.update_layout(
-    title="Heatmap de Frequências de Verbos por Categoria",
-    xaxis_title="Verbos",
-    yaxis_title="Categorias",
-    xaxis=dict(tickangle=-45)  # Inclinar os rótulos dos verbos para melhor visualização
+# Ajustar o layout para melhorar a legibilidade
+fig.update_layout(
+    xaxis=dict(title="Verbos", tickangle=-45),
+    yaxis=dict(title="Categorias"),
+    coloraxis_colorbar=dict(title="Frequência"),
 )
 
-# Exibir o heatmap
-st.plotly_chart(heatmap)
+# Exibir o heatmap no Streamlit
+st.plotly_chart(fig)
 
-# Observação sobre a funcionalidade
-st.markdown(
-    "Selecione uma categoria de referência para reorganizar os verbos com base na frequência nessa categoria."
-)
+# Informar sobre os dados
+st.write("Dados usados para o heatmap:")
+st.dataframe(freq_df)

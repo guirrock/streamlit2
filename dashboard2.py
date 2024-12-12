@@ -9,7 +9,7 @@ df = pd.read_csv("freq_df.csv")
 pivot_df = df.pivot_table(index='Categoria', columns='Keyword', values='Frequency', aggfunc='sum', fill_value=0)
 
 # Título do dashboard
-st.title('Heatmap de Frequência de Verbos por Nível da Taxonomia de Bloom')
+st.title('Frequência de Verbos por Nível da Taxonomia de Bloom')
 
 # Opção para o usuário escolher a categoria para ordenar os verbos no eixo X
 categorias = df['Categoria'].unique()  # Obtém as categorias únicas no dataframe

@@ -46,7 +46,7 @@ fig = go.Figure(data=go.Heatmap(
 
 # Adicionando título e rótulos ao gráfico
 fig.update_layout(
-    title=f'Heatmap de Frequência de Verbos por Nível da Taxonomia de Bloom (Ordenado por {categoria_selecionada} e mínimo {min_freq} aparições)',
+    title=f'Frequência de Verbos por Nível da Taxonomia de Bloom (Ordenado por {categoria_selecionada} e mínimo {min_freq} aparições)',
     xaxis_title='Verbos',
     yaxis_title='Categorias da Taxonomia de Bloom',
     xaxis={'tickangle': 45},  # Rotacionando os rótulos dos verbos para melhor visualização

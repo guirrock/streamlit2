@@ -54,7 +54,7 @@ fig = go.Figure(data=go.Heatmap(
     z=pivot_df_filtered.values,  # Frequências
     x=pivot_df_filtered.columns,  # Verbos (colunas)
     y=pivot_df_filtered.index,  # Categorias (linhas)
-    colorscale='Rainbow',  # Escala de cores
+    colorscale='Reds',  # Escala de cores
     hovertemplate=(
         'Verbo: %{x}<br>'  # Exibe o verbo no eixo X
         'Categoria: %{y}<br>'  # Exibe a categoria no eixo Y

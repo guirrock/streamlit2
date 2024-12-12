@@ -61,8 +61,11 @@ st.plotly_chart(fig)
 selected_verb = st.selectbox('Escolha um verbo:', pivot_df_filtered.columns)
 selected_category = st.selectbox('Escolha uma categoria de Bloom:', categorias_ordenadas)
 
-# Filtrar as perguntas que utilizam o verbo e a categoria selecionados
-perguntas_filtradas = perguntas_df[(perguntas_df['Questões'] == selected_verb) & (perguntas_df['Categoria'] == selected_category)]
+# Filtrar as perguntas que contêm o verbo selecionado (com str.contains) e a categoria de Bloom selecionada
+perguntas_filtradas = perguntas_df[
+    perguntas_df['Questões'].str.contains(selected_verb, case=False) & 
+    (perguntas_df['Categoria'] == selected_category)
+]
 
 # Exibir as perguntas
 if not perguntas_filtradas.empty:

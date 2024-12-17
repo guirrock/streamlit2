@@ -69,6 +69,19 @@ fig.update_layout(
     yaxis={'categoryorder': 'array', 'categoryarray': categorias_ordenadas},  # Garantindo a ordem das categorias
 )
 
+# Adicionando legenda abaixo do gráfico
+fig.add_annotation(
+    xref="paper", yref="paper",
+    x=0.5, y=-0.2,  # Posição da legenda abaixo do gráfico
+    text=(
+        "BT1 - Lembrar | BT2 - Compreender | BT3 - Aplicar | "
+        "BT4 - Analisar | BT5 - Avaliar | BT6 - Criar"
+    ),
+    showarrow=False,
+    font=dict(size=12),
+    xanchor="center",
+)
+
 # Exibindo o gráfico no Streamlit
 st.plotly_chart(fig)
 

@@ -70,34 +70,18 @@ fig.update_layout(
     margin=dict(l=40, r=40, t=80, b=150),
 )
 
-# Adicionando "legenda" com tooltips usando scatter invisível
-legenda_textos = [
-    ("BT1", "Lembrar", "Refere-se à habilidade do estudante em recordar, definir, reconhecer ou identificar informação específica, a partir de situações de aprendizagem anteriores."),
-    ("BT2", "Compreender", "Envolve entender o significado da informação e interpretá-la corretamente."),
-    ("BT3", "Aplicar", "Habilidade de usar o conhecimento em situações práticas."),
-    ("BT4", "Analisar", "Capacidade de dividir a informação em partes e entender suas relações."),
-    ("BT5", "Avaliar", "Envolve fazer julgamentos baseados em critérios e padrões."),
-    ("BT6", "Criar", "Capacidade de produzir algo novo ou reorganizar ideias para formar algo original.")
-]
-
-# Coordenadas x e y para a legenda (abaixo do gráfico)
-x_legenda = [i for i in range(len(legenda_textos))]  # Posição dos pontos no eixo X
-y_legenda = [-1 for _ in legenda_textos]  # Todos no mesmo nível abaixo do gráfico
-
-# Adiciona scatter invisível com tooltips
-fig.add_trace(go.Scatter(
-    x=x_legenda,
-    y=y_legenda,
-    mode='markers+text',
-    text=[f"{item[0]} - {item[1]}" for item in legenda_textos],  # BT1 - Lembrar
-    textposition="top center",
-    hovertext=[item[2] for item in legenda_textos],  # Tooltip com a descrição
-    hoverinfo="text",
-    marker=dict(size=0, opacity=0),  # Pontos invisíveis
-))
-
-# Ajusta os limites do gráfico para exibir a "legenda"
-fig.update_yaxes(range=[-1.5, len(pivot_df_filtered.index)])  # Estende a visualização no eixo Y
+# Adicionando legenda abaixo do gráfico com mais distância
+fig.add_annotation(
+    xref="paper", yref="paper",
+    x=0.5, y=-0.60,  # Reposiciona mais abaixo (-0.35)
+    text=(
+        "BT1 - Lembrar | BT2 - Compreender | BT3 - Aplicar | "
+        "BT4 - Analisar | BT5 - Avaliar | BT6 - Criar"
+    ),
+    showarrow=False,
+    font=dict(size=12),
+    xanchor="center",
+)
 
 # Exibindo o gráfico no Streamlit
 st.plotly_chart(fig)

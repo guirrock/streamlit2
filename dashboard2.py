@@ -73,7 +73,7 @@ fig.update_layout(
 # Adicionando legenda abaixo do gráfico
 fig.add_annotation(
     xref="paper", yref="paper",
-     x=0.5, y=-0.5,  # Posição da legenda abaixo do gráfico
+     x=0.5, y=-0.75,  # Posição da legenda abaixo do gráfico
     text=(
         "BT1 - Lembrar | BT2 - Compreender | BT3 - Aplicar | "
         "BT4 - Analisar | BT5 - Avaliar | BT6 - Criar"

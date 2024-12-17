@@ -67,6 +67,7 @@ fig.update_layout(
     yaxis_title='Categorias da Taxonomia de Bloom',
     xaxis={'tickangle': 45},  # Rotacionando os rótulos dos verbos para melhor visualização
     yaxis={'categoryorder': 'array', 'categoryarray': categorias_ordenadas},  # Garantindo a ordem das categorias
+    margin=dict(l=40, r=40, t=80, b=150),
 )
 
 # Adicionando legenda abaixo do gráfico

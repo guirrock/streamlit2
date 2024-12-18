@@ -88,6 +88,10 @@ st.plotly_chart(fig)
 
 st.subheader('Filtrar perguntas por Verbo e Nível:')
 
+# Selecione um verbo e categoria para exibir as perguntas
+selected_verb = st.selectbox('Escolha um verbo:', verbos_selecionados)
+selected_category = st.selectbox('Escolha uma categoria de Bloom:', categorias_ordenadas)
+
 # Filtrar o dataset de verbos com base no verbo e na categoria selecionados
 filtered_verbos = df[
     (df['Keyword'] == selected_verb) & (df['Categoria'] == selected_category)

@@ -2,6 +2,11 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 import re
+import networkx as nx
+from pyvis.network import Network
+from nltk.tokenize import word_tokenize
+from collections import Counter
+import re
 
 # Adicionar estilo CSS para a área de rolagem fixa
 st.markdown(
@@ -171,12 +176,7 @@ else:
 
 
 
-import streamlit as st
-import networkx as nx
-from pyvis.network import Network
-from nltk.tokenize import word_tokenize
-from collections import Counter
-import re
+
 
 st.subheader('Criar Árvore de Palavras com o Verbo Selecionado')
 

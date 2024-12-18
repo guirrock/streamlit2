@@ -236,3 +236,6 @@ word_tree_text = build_word_tree_text(word_counts, selected_verb, max_depth=max_
 
 # Exibir a árvore de palavras no Streamlit
 st.text_area("Árvore de Palavras", word_tree_text, height=400)
+
+# Mostrar a estrutura de word_counts para depuração
+st.write("Estrutura de word_counts:", dict(word_counts))

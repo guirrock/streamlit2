@@ -167,3 +167,81 @@ if not perguntas_filtradas.empty:
     st.markdown(perguntas_html, unsafe_allow_html=True)
 else:
     st.write(f"Nenhuma pergunta encontrada para o verbo '{selected_verb}' e categoria '{selected_category}'.")
+
+
+
+
+import streamlit as st
+import networkx as nx
+from pyvis.network import Network
+from nltk.tokenize import word_tokenize
+from collections import Counter
+import re
+
+st.subheader('Criar Árvore de Palavras com o Verbo Selecionado')
+
+# Filtrar as perguntas com base no verbo selecionado
+selected_verb = st.selectbox('Escolha um verbo para a árvore:', verbos_selecionados)
+
+# Filtrar o dataset para as perguntas que contêm o verbo selecionado
+filtered_questions = perguntas_df[perguntas_df['Questões'].str.contains(rf'\b{selected_verb}\b', case=False, na=False)]
+
+if not filtered_questions.empty:
+    st.subheader(f"Gerando árvore para o verbo '{selected_verb}':")
+
+    # Tokenizar as perguntas e extrair palavras subsequentes ao verbo
+    word_sequences = []
+    for question in filtered_questions['Questões']:
+        if isinstance(question, str):
+            tokens = word_tokenize(question.lower())  # Tokenizar a frase
+            try:
+                verb_index = tokens.index(selected_verb.lower())  # Encontra o índice do verbo
+                word_sequences.append(tokens[verb_index + 1:])  # Pega palavras após o verbo
+            except ValueError:
+                continue  # Ignora se o verbo não está presente
+
+    # Contar as palavras mais frequentes em cada nível da árvore
+    tree_structure = {selected_verb: {}}  # Raiz da árvore é o verbo
+    current_level = {selected_verb: word_sequences}  # Começa com o verbo e as palavras subsequentes
+
+    # Número de níveis e palavras por nível
+    num_levels = 3
+    num_words_per_level = 2
+
+    for level in range(num_levels):
+        next_level = {}
+        for node, sequences in current_level.items():
+            # Conta as palavras que aparecem após o nó atual
+            word_counter = Counter(word for seq in sequences for word in seq[:1])  # Apenas a próxima palavra
+            most_common_words = word_counter.most_common(num_words_per_level)
+
+            # Adiciona as palavras mais comuns ao próximo nível
+            tree_structure[node] = {}
+            for word, _ in most_common_words:
+                # Filtra as sequências para as palavras que começam com a palavra atual
+                filtered_sequences = [seq[1:] for seq in sequences if seq and seq[0] == word]
+                tree_structure[node][word] = {}
+                next_level[word] = filtered_sequences
+
+        current_level = next_level  # Atualiza o nível atual
+
+    # Criar a árvore com NetworkX
+    graph = nx.DiGraph()
+    def add_edges(tree, parent=None):
+        for node, children in tree.items():
+            if parent:
+                graph.add_edge(parent, node)  # Adiciona aresta entre nós
+            add_edges(children, node)
+
+    add_edges(tree_structure)
+
+    # Visualizar a árvore com PyVis
+    net = Network(notebook=True, height="600px", width="100%", directed=True)
+    net.from_nx(graph)
+    net.show("tree.html")
+
+    # Exibir a árvore interativa no Streamlit
+    st.components.v1.html(open("tree.html", "r").read(), height=650, scrolling=True)
+else:
+    st.write(f"Nenhuma pergunta encontrada para o verbo '{selected_verb}'.")
+

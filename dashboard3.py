@@ -194,7 +194,7 @@ if not filtered_questions.empty:
     current_level = {selected_verb: []}  # Começa com o verbo e as palavras subsequentes
 
     # Número de níveis e palavras por nível
-    num_levels = 3
+    num_levels = 2
     num_words_per_level = 2
 
     # Para cada nível, extrair palavras subsequentes ao verbo
@@ -215,6 +215,7 @@ if not filtered_questions.empty:
 
     # Criar a árvore com NetworkX
     graph = nx.DiGraph()
+
     def add_edges(tree, parent=None):
         for node, children in tree.items():
             if parent:
@@ -226,9 +227,8 @@ if not filtered_questions.empty:
     # Visualizar a árvore com PyVis
     net = Network(notebook=True, height="600px", width="100%", directed=True)
     net.from_nx(graph)
-    net.show("tree.html")
 
-    # Exibir a árvore interativa no Streamlit
-    st.components.v1.html(open("tree.html", "r").read(), height=650, scrolling=True)
+    # Exibir a árvore interativa diretamente no Streamlit
+    st.components.v1.html(net.generate_html(), height=650, scrolling=True)
 else:
     st.write(f"Nenhuma pergunta encontrada para o verbo '{selected_verb}'.")

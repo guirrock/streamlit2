@@ -193,7 +193,7 @@ if not filtered_questions.empty:
     st.subheader(f"Gerando árvore de palavras para o verbo '{selected_verb}':")
 
     # Criar um dicionário para armazenar a árvore de palavras
-    word_tree = defaultdict(lambda: defaultdict(lambda: defaultdict(dict)))  # 3 níveis de defaultdict
+    word_tree = defaultdict(lambda: defaultdict(int))  # Usar int para contar as ocorrências
 
     # Para cada pergunta, extrair as palavras subsequentes ao verbo
     for question in filtered_questions['Questões']:
@@ -209,13 +209,13 @@ if not filtered_questions.empty:
             # Criação da estrutura de árvore com palavras subsequentes
             current_node = word_tree
             for word in subsequents:
-                current_node = current_node[word]  # Mover para o próximo nível
+                current_node[word] += 1  # Aumenta o contador de ocorrências da palavra
 
     # Função recursiva para gerar a árvore de palavras como string
     def print_tree(node, level=0):
         result = ""
         for word, subnode in node.items():
-            result += "  " * level + f"-> {word}\n"
+            result += "  " * level + f"-> {word} ({subnode})\n"  # Adicionar contagem de ocorrências
             result += print_tree(subnode, level + 1)  # Recursão para cada subárvore
         return result
 

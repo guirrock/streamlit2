@@ -193,7 +193,7 @@ if not filtered_questions.empty:
     st.subheader(f"Gerando árvore de palavras para o verbo '{selected_verb}':")
 
     # Criar um dicionário para armazenar a árvore de palavras
-    word_tree = defaultdict(lambda: defaultdict(int))  # Usar int para contar as ocorrências
+    word_tree = defaultdict(lambda: defaultdict(int))  # Usar defaultdict(int) para contagem de palavras
 
     # Para cada pergunta, extrair as palavras subsequentes ao verbo
     for question in filtered_questions['Questões']:
@@ -209,6 +209,8 @@ if not filtered_questions.empty:
             # Criação da estrutura de árvore com palavras subsequentes
             current_node = word_tree
             for word in subsequents:
+                current_node = current_node[word]  # Navega para o próximo nível
+                current_node = defaultdict(int)  # Garante que o valor é sempre um contador de int
                 current_node[word] += 1  # Aumenta o contador de ocorrências da palavra
 
     # Função recursiva para gerar a árvore de palavras como string

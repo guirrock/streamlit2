@@ -1,9 +1,13 @@
+!pip install stanza
+
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 import re
 import stanza
 
+# Baixar o modelo da língua portuguesa (uma vez)
+stanza.download('pt')
 
 # Carregar os arquivos de dados
 df = pd.read_csv("freq_df.csv")

@@ -128,6 +128,8 @@ else:
 # Prefixo da palavra a ser destacada
 prefix = re.escape(selected_verb[:3])  # Escapa caracteres especiais
 
+prefix = re.escape(selected_verb[:3])
+
 # Adiciona CSS para área de rolagem
 st.markdown(
     """
@@ -138,9 +140,6 @@ st.markdown(
         background-color: #f4f4f4;
         padding: 10px;
         border: 1px solid #ddd;
-    }
-    .scrollable-container h4 {
-        margin-top: 0;
     }
     </style>
     """,
@@ -158,7 +157,8 @@ if not perguntas_filtradas.empty:
                 row['Questões'],
                 flags=re.IGNORECASE
             )
-            st.markdown(f"<h4>{pergunta_destacada}</h4>", unsafe_allow_html=True)
+            # Adiciona cada pergunta dentro da div de rolagem
+            st.markdown(f"<p>{pergunta_destacada}</p>", unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 else:
     st.write(f"Nenhuma pergunta encontrada para o verbo '{selected_verb}' e categoria '{selected_category}'.")

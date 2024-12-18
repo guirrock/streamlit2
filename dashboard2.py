@@ -2,6 +2,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 import re
+import stanza
 
 
 # Carregar os arquivos de dados

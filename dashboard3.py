@@ -218,8 +218,11 @@ if not filtered_questions.empty:
     def print_tree(node, level=0):
         result = ""
         for word, subnode in node.items():
-            result += "  " * level + f"-> {word} ({subnode})\n"  # Adicionar contagem de ocorrências
-            result += print_tree(subnode, level + 1)  # Recursão para cada subárvore
+            if isinstance(subnode, defaultdict):  # Verifica se é um subnó (dicionário)
+                result += "  " * level + f"-> {word}\n"
+                result += print_tree(subnode, level + 1)  # Recursão para cada subárvore
+            else:  # Quando atingimos um nó terminal, ou seja, um contador
+                result += "  " * (level + 1) + f"{word} ({subnode})\n"  # Adiciona o contador de ocorrências
         return result
 
     # Gerar e exibir a árvore de palavras

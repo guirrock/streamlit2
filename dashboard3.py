@@ -7,6 +7,8 @@ from pyvis.network import Network
 from nltk.tokenize import word_tokenize
 from collections import Counter
 import re
+from collections import defaultdict
+
 
 # Adicionar estilo CSS para a área de rolagem fixa
 st.markdown(

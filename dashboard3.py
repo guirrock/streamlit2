@@ -209,8 +209,9 @@ if not filtered_questions.empty:
             # Criação da estrutura de árvore com palavras subsequentes
             current_node = word_tree
             for word in subsequents:
+                if word not in current_node:
+                    current_node[word] = defaultdict(int)  # Inicializar o dicionário de contadores para essa palavra
                 current_node = current_node[word]  # Navega para o próximo nível
-                current_node = defaultdict(int)  # Garante que o valor é sempre um contador de int
                 current_node[word] += 1  # Aumenta o contador de ocorrências da palavra
 
     # Função recursiva para gerar a árvore de palavras como string

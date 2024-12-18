@@ -218,8 +218,10 @@ G.add_node(selected_verb, size=100, color='red')
 for word, next_words in word_counts.items():
     if word.startswith(selected_verb[:4].lower()):
         for next_word, count in next_words.items():
+            # Adicionar o nó se ainda não existir
+            if next_word not in G:
+                G.add_node(next_word, size=80)
             G.add_edge(word, next_word, weight=count)
-            G.nodes[next_word]['size'] = G.nodes[word]['size'] * 0.8  # Reduzir o tamanho do nó
 
 # Visualizar a árvore
 net = Network(height='600px', width='100%', notebook=True)

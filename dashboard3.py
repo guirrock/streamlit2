@@ -209,7 +209,7 @@ if not all_perguntas_filtradas.empty:
                     word_counts[words[i].lower()][words[i + 1].lower()] += 1
 
 # Função para construir a representação textual da árvore de palavras
-def build_word_tree_text(word_counts, root_word, max_depth=None):
+def build_word_tree_text(word_counts, root_word, max_depth=None, top_n=2):
     tree_lines = []
     visited = set()
 
@@ -223,7 +223,7 @@ def build_word_tree_text(word_counts, root_word, max_depth=None):
             tree_lines.append("    " * (level - 1) + "-> " + word)
         
         if word in word_counts:
-            for next_word, count in word_counts[word].most_common():
+            for next_word, count in word_counts[word].most_common(top_n):
                 st.write(f"Visitando: {next_word} (Nivel: {level + 1})")  # Depuração
                 traverse(next_word, level + 1)
 
@@ -233,7 +233,7 @@ def build_word_tree_text(word_counts, root_word, max_depth=None):
 # Construir a representação textual da árvore com profundidade máxima para teste
 max_depth = st.slider('Selecione a profundidade máxima da árvore para exibir:', min_value=1, max_value=10, value=3)
 
-word_tree_text = build_word_tree_text(word_counts, selected_verb, max_depth=max_depth)
+word_tree_text = build_word_tree_text(word_counts, selected_verb, max_depth=max_depth, top_n=2)
 
 # Exibir a árvore de palavras no Streamlit
 st.text_area("Árvore de Palavras", word_tree_text, height=400)

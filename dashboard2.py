@@ -108,14 +108,34 @@ if not filtered_verbos.empty:
 else:
     perguntas_filtradas = pd.DataFrame()
 
-# Exibir as perguntas filtradas
+st.subheader('Perguntas encontradas:')
+
 if not perguntas_filtradas.empty:
-    st.subheader('Perguntas encontradas:')
-    for index, row in perguntas_filtradas.iterrows():
-        # Verificar se a 'Questões' não é NaN e é uma string
-        if isinstance(row['Questões'], str):
-            # Destacar o verbo na pergunta
-            pergunta_destacada = re.sub(rf'\b{selected_verb}\b', f"<mark>{selected_verb}</mark>", row['Questões'], flags=re.IGNORECASE)
-            st.markdown(f"- {pergunta_destacada}", unsafe_allow_html=True)
+    # Criar um contêiner para as perguntas com barra de rolagem
+    with st.container():
+        # Aplicar estilo CSS para altura fixa e rolagem
+        st.markdown("""
+            <style>
+            .scrollable-container {
+                max-height: 400px; /* Altura fixa (10 perguntas aprox.) */
+                overflow-y: auto; /* Habilitar barra de rolagem vertical */
+                padding: 10px;
+                border: 1px solid #ccc; /* Opcional: adicionar borda */
+                border-radius: 5px; /* Opcional: cantos arredondados */
+                background-color: #f9f9f9; /* Opcional: cor de fundo */
+            }
+            </style>
+            <div class="scrollable-container">
+            """, unsafe_allow_html=True)
+
+        # Adicionar perguntas ao contêiner
+        for index, row in perguntas_filtradas.iterrows():
+            if isinstance(row['Questões'], str):
+                pergunta_destacada = re.sub(rf'\b{selected_verb}\b', f"<mark>{selected_verb}</mark>", row['Questões'], flags=re.IGNORECASE)
+                st.markdown(f"- {pergunta_destacada}", unsafe_allow_html=True)
+
+        # Fechar a div
+        st.markdown("</div>", unsafe_allow_html=True)
 else:
     st.write("Nenhuma pergunta encontrada para o verbo e categoria selecionados.")
+

@@ -108,6 +108,9 @@ if not filtered_verbos.empty:
 else:
     perguntas_filtradas = pd.DataFrame()
 
+# Prefixo da palavra a ser destacada
+prefix = selected_verb[:5]  # Por exemplo, pega os primeiros 5 caracteres (ajuste conforme necessário)
+
 st.subheader('Perguntas encontradas:')
 
 # Gerar o conteúdo das perguntas
@@ -116,7 +119,11 @@ for row in perguntas_filtradas:
     if row['Categoria'] == selected_category:  # Filtrar pela categoria
         if isinstance(row['Questões'], str):
             # Destacar o verbo na pergunta
-            pergunta_destacada = re.sub(rf'\b{selected_verb}\b', f"<mark>{selected_verb}</mark>", row['Questões'], flags=re.IGNORECASE)
+            # Substitui palavras que começam com o prefixo
+            pergunta_destacada = re.sub(rf'\b{prefix}\w*\b', 
+                            lambda match: f"<mark>{match.group()}</mark>", 
+                            row['Questões'], 
+                            flags=re.IGNORECASE)
             perguntas_html += f"<p>- {pergunta_destacada}</p>"
 
 # CSS para adicionar rolagem ao expansor

@@ -90,7 +90,7 @@ st.subheader('Filtrar perguntas por Verbo e Nível:')
 
 # Filtrar o dataset de verbos com base no verbo e na categoria selecionados
 filtered_verbos = df[
-    (verbos_df['Verbo'] == selected_verb) & (verbos_df['Categoria'] == selected_category)
+    (df['Keyword'] == selected_verb) & (df['Categoria'] == selected_category)
 ]
 
 # Obter os IDs das perguntas que contêm o verbo na categoria selecionada

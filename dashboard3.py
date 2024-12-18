@@ -128,21 +128,37 @@ else:
 # Prefixo da palavra a ser destacada
 prefix = re.escape(selected_verb[:3])  # Escapa caracteres especiais
 
-# Exibir as perguntas filtradas em uma área com barra de rolagem
+# Adiciona CSS para área de rolagem
+st.markdown(
+    """
+    <style>
+    .scrollable-container {
+        height: 300px;
+        overflow-y: scroll;
+        background-color: #f4f4f4;
+        padding: 10px;
+        border: 1px solid #ddd;
+    }
+    .scrollable-container h4 {
+        margin-top: 0;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 if not perguntas_filtradas.empty:
     st.subheader(f"Perguntas filtradas para '{selected_verb}' em '{selected_category}':")
-    st.markdown('<div class="scrollable-box">', unsafe_allow_html=True)
+    st.markdown('<div class="scrollable-container">', unsafe_allow_html=True)
     for index, row in perguntas_filtradas.iterrows():
-        # Verificar se a 'Questões' não é NaN e é uma string
         if isinstance(row['Questões'], str):
-            # Destacar o verbo na pergunta
             pergunta_destacada = re.sub(
                 rf'\b{prefix}[a-zA-Z]*\b',
                 lambda match: f"<mark>{match.group()}</mark>",
                 row['Questões'],
                 flags=re.IGNORECASE
             )
-            st.markdown(f"- {pergunta_destacada}", unsafe_allow_html=True)
+            st.markdown(f"<h4>{pergunta_destacada}</h4>", unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 else:
     st.write(f"Nenhuma pergunta encontrada para o verbo '{selected_verb}' e categoria '{selected_category}'.")

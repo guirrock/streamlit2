@@ -3,6 +3,23 @@ import plotly.graph_objects as go
 import streamlit as st
 import re
 
+# Adicionar estilo CSS para a área de rolagem fixa
+st.markdown(
+    """
+    <style>
+    .scrollable-box {
+        max-height: 300px; /* Altura fixa para a área */
+        overflow-y: auto; /* Adicionar barra de rolagem */
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        font-family: Arial, sans-serif;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 # Carregar os arquivos de dados
 df = pd.read_csv("freq_df.csv")
@@ -130,35 +147,25 @@ prefix = re.escape(selected_verb[:3])  # Escapa caracteres especiais
 
 prefix = re.escape(selected_verb[:3])
 
-# Adiciona CSS para área de rolagem
-st.markdown(
-    """
-    <style>
-    .scrollable-container {
-        height: 300px;
-        overflow-y: scroll;
-        background-color: #f4f4f4;
-        padding: 10px;
-        border: 1px solid #ddd;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
+# Exibir as perguntas filtradas em uma área com barra de rolagem
 if not perguntas_filtradas.empty:
     st.subheader(f"Perguntas filtradas para '{selected_verb}' em '{selected_category}':")
-    st.markdown('<div class="scrollable-container">', unsafe_allow_html=True)
+
+    # Construir um bloco único de HTML para todas as perguntas
+    perguntas_html = '<div class="scrollable-box">'
     for index, row in perguntas_filtradas.iterrows():
         if isinstance(row['Questões'], str):
+            # Destacar o verbo na pergunta
             pergunta_destacada = re.sub(
                 rf'\b{prefix}[a-zA-Z]*\b',
                 lambda match: f"<mark>{match.group()}</mark>",
                 row['Questões'],
                 flags=re.IGNORECASE
             )
-            # Adiciona cada pergunta dentro da div de rolagem
-            st.markdown(f"<p>{pergunta_destacada}</p>", unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+            perguntas_html += f"<p>- {pergunta_destacada}</p>"
+    perguntas_html += '</div>'
+
+    # Renderizar as perguntas dentro da área de rolagem
+    st.markdown(perguntas_html, unsafe_allow_html=True)
 else:
     st.write(f"Nenhuma pergunta encontrada para o verbo '{selected_verb}' e categoria '{selected_category}'.")

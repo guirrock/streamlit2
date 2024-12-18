@@ -180,54 +180,52 @@ else:
 
 
 
-st.subheader('Criar Árvore de Palavras com o Verbo Selecionado')
 
-# Filtrar as perguntas com base no verbo selecionado
-filtered_questions = perguntas_df[perguntas_df['Questões'].str.contains(rf'\b{selected_verb}\b', case=False, na=False)]
+st.subheader('Árvore de Palavras para Perguntas com o Verbo Selecionado')
 
-# Verificar se há perguntas filtradas
-st.write("Perguntas filtradas:")
-st.write(filtered_questions)
+# Filtrar todas as perguntas que contêm o verbo selecionado (independente do nível)
+filtered_all_questions = df[df['Keyword'] == selected_verb]
 
-if not filtered_questions.empty:
-    st.subheader(f"Gerando árvore de palavras para o verbo '{selected_verb}':")
+# Obter os IDs das perguntas que contêm o verbo selecionado
+if not filtered_all_questions.empty:
+    all_question_ids = []
+    for ids in filtered_all_questions['IDs_perguntas']:
+        all_question_ids.extend(map(int, ids.split('/')))  # Coletar todos os IDs das perguntas
 
-    # Criar um dicionário para armazenar a árvore de palavras
-    word_tree = defaultdict(lambda: defaultdict(int))  # Usar defaultdict(int) para contagem de palavras
+    # Filtrar as perguntas no DataFrame principal usando os IDs
+    all_perguntas_filtradas = perguntas_df[perguntas_df['id_pergunta'].isin(all_question_ids)]
+else:
+    all_perguntas_filtradas = pd.DataFrame()
 
-    # Para cada pergunta, extrair as palavras subsequentes ao verbo
-    for question in filtered_questions['Questões']:
-        question_lower = question.lower()
-        if selected_verb.lower() in question_lower:
-            # Dividir a pergunta em palavras
-            words = question_lower.split()
+# Tokenizar as palavras das perguntas filtradas
+if not all_perguntas_filtradas.empty:
+    word_counts = defaultdict(Counter)
+    
+    for index, row in all_perguntas_filtradas.iterrows():
+        if isinstance(row['Questões'], str):
+            words = word_tokenize(row['Questões'].lower())
+            for i in range(len(words) - 1):
+                word_counts[words[i]][words[i + 1]] += 1
 
-            # Encontrar o índice do verbo na lista de palavras
-            verb_index = words.index(selected_verb.lower())
-            subsequents = words[verb_index + 1:]  # Palavras após o verbo
+    # Construir a árvore de palavras
+    G = nx.DiGraph()
 
-            # Criação da estrutura de árvore com palavras subsequentes
-            current_node = word_tree
-            for word in subsequents:
-                if word not in current_node:
-                    current_node[word] = defaultdict(int)  # Inicializar o dicionário de contadores para essa palavra
-                current_node = current_node[word]  # Navega para o próximo nível
-                current_node[word] += 1  # Aumenta o contador de ocorrências da palavra
+    # Adicionar o nó raiz
+    G.add_node(selected_verb, size=100, color='red')
 
-    # Função recursiva para gerar a árvore de palavras como string
-    def print_tree(node, level=0):
-        result = ""
-        for word, subnode in node.items():
-            if isinstance(subnode, defaultdict):  # Verifica se é um subnó (dicionário)
-                result += "  " * level + f"-> {word}\n"
-                result += print_tree(subnode, level + 1)  # Recursão para cada subárvore
-            else:  # Quando atingimos um nó terminal, ou seja, um contador
-                result += "  " * (level + 1) + f"{word} ({subnode})\n"  # Adiciona o contador de ocorrências
-        return result
+    # Adicionar nós e arestas
+    for word, next_words in word_counts.items():
+        if word.startswith(selected_verb[:4]):
+            for next_word, count in next_words.items():
+                G.add_edge(word, next_word, weight=count)
+                G.nodes[next_word]['size'] = G.nodes[word]['size'] * 0.8  # Reduzir o tamanho do nó
 
-    # Gerar e exibir a árvore de palavras
-    tree_output = print_tree(word_tree)
-    st.text(tree_output)
+    # Visualizar a árvore
+    net = Network(height='600px', width='100%', notebook=True)
+    net.from_nx(G)
+    net.show('word_tree.html')
 
+    # Exibir a árvore no Streamlit
+    st.components.v1.html(open('word_tree.html', 'r').read(), height=600)
 else:
     st.write(f"Nenhuma pergunta encontrada para o verbo '{selected_verb}'.")

@@ -197,35 +197,34 @@ if not filtered_all_questions.empty:
 else:
     all_perguntas_filtradas = pd.DataFrame()
 
-# Tokenizar as palavras das perguntas filtradas
+# Contar as palavras que seguem o verbo selecionado diretamente nas perguntas
+word_counts = defaultdict(Counter)
+
 if not all_perguntas_filtradas.empty:
-    word_counts = defaultdict(Counter)
-    
     for index, row in all_perguntas_filtradas.iterrows():
         if isinstance(row['Questões'], str):
-            words = word_tokenize(row['Questões'].lower())
+            words = row['Questões'].split()
             for i in range(len(words) - 1):
-                word_counts[words[i]][words[i + 1]] += 1
+                if words[i].lower().startswith(selected_verb[:4].lower()):
+                    word_counts[words[i].lower()][words[i + 1].lower()] += 1
 
-    # Construir a árvore de palavras
-    G = nx.DiGraph()
+# Construir a árvore de palavras
+G = nx.DiGraph()
 
-    # Adicionar o nó raiz
-    G.add_node(selected_verb, size=100, color='red')
+# Adicionar o nó raiz
+G.add_node(selected_verb, size=100, color='red')
 
-    # Adicionar nós e arestas
-    for word, next_words in word_counts.items():
-        if word.startswith(selected_verb[:4]):
-            for next_word, count in next_words.items():
-                G.add_edge(word, next_word, weight=count)
-                G.nodes[next_word]['size'] = G.nodes[word]['size'] * 0.8  # Reduzir o tamanho do nó
+# Adicionar nós e arestas
+for word, next_words in word_counts.items():
+    if word.startswith(selected_verb[:4].lower()):
+        for next_word, count in next_words.items():
+            G.add_edge(word, next_word, weight=count)
+            G.nodes[next_word]['size'] = G.nodes[word]['size'] * 0.8  # Reduzir o tamanho do nó
 
-    # Visualizar a árvore
-    net = Network(height='600px', width='100%', notebook=True)
-    net.from_nx(G)
-    net.show('word_tree.html')
+# Visualizar a árvore
+net = Network(height='600px', width='100%', notebook=True)
+net.from_nx(G)
+net.show('word_tree.html')
 
-    # Exibir a árvore no Streamlit
-    st.components.v1.html(open('word_tree.html', 'r').read(), height=600)
-else:
-    st.write(f"Nenhuma pergunta encontrada para o verbo '{selected_verb}'.")
+# Exibir a árvore no Streamlit
+st.components.v1.html(open('word_tree.html', 'r').read(), height=600)

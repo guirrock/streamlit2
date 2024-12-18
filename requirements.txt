@@ -3,3 +3,6 @@ pandas
 spacy
 plotly
 wordtree
+networkx
+pyvis
+nltk

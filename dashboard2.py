@@ -110,7 +110,7 @@ else:
 
 # Exibir as perguntas filtradas
 if not perguntas_filtradas.empty:
-    st.subheader('Perguntas encontradas:')
+    st.subheader('Perguntas encontradas2:')
     for index, row in perguntas_filtradas.iterrows():
         # Verificar se a 'Questões' não é NaN e é uma string
         if isinstance(row['Questões'], str):

@@ -248,8 +248,3 @@ if not filtered_questions.empty:
     st.components.v1.html(net.generate_html(), height=650, scrolling=True)
 else:
     st.write(f"Nenhuma pergunta encontrada para o verbo '{selected_verb}'.")
-
-    # Exibir a árvore interativa diretamente no Streamlit
-    st.components.v1.html(net.generate_html(), height=650, scrolling=True)
-else:
-    st.write(f"Nenhuma pergunta encontrada para o verbo '{selected_verb}'.")

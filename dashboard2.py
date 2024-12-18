@@ -89,7 +89,6 @@ st.plotly_chart(fig)
 
 st.subheader('Filtrar perguntas por Verbo e Nível:')
 
-# Inicializar o Stanza
 stanza.download('pt')
 nlp = stanza.Pipeline('pt', processors='tokenize,mwt,pos,lemma', use_gpu=True)
 

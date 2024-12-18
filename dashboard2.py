@@ -110,8 +110,6 @@ else:
 
 st.subheader('Perguntas encontradas:')
 
-st.subheader('Perguntas encontradas:')
-
 if not perguntas_filtradas.empty:
     # Gerar o conteúdo das perguntas
     perguntas_html = ""
@@ -119,25 +117,13 @@ if not perguntas_filtradas.empty:
         if isinstance(row['Questões'], str):
             # Destacar o verbo na pergunta
             pergunta_destacada = re.sub(rf'\b{selected_verb}\b', f"<mark>{selected_verb}</mark>", row['Questões'], flags=re.IGNORECASE)
-            perguntas_html += f"<p>- {pergunta_destacada}</p>"
+            perguntas_html += f"<p>{pergunta_destacada}</p>"
 
-    # Criar uma div com barra de rolagem
-    scrollable_div = f"""
-        <div style="
-            max-height: 400px; /* Altura fixa */
-            overflow-y: auto; /* Rolagem vertical */
-            padding: 10px;
-            border: 1px solid #ccc; /* Borda */
-            border-radius: 5px; /* Cantos arredondados */
-            background-color: #f9f9f9; /* Fundo */
-        ">
+    # Criar uma div com barra de rolagem utilizando CSS dentro do markdown
+    st.markdown(f"""
+        <div style="max-height: 400px; overflow-y: scroll; padding: 10px; border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9;">
             {perguntas_html}
         </div>
-    """
-
-    # Renderizar o HTML no Streamlit
-    st.components.v1.html(scrollable_div, height=450)
+    """, unsafe_allow_html=True)
 else:
     st.write("Nenhuma pergunta encontrada para o verbo e categoria selecionados.")
-
-

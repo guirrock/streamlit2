@@ -186,6 +186,10 @@ selected_verb = st.selectbox('Escolha um verbo para a árvore:', verbos_selecion
 # Filtrar as perguntas com base no verbo selecionado
 filtered_questions = perguntas_df[perguntas_df['Questões'].str.contains(rf'\b{selected_verb}\b', case=False, na=False)]
 
+# Verificar se há perguntas filtradas
+st.write("Perguntas filtradas:")
+st.write(filtered_questions)
+
 if not filtered_questions.empty:
     st.subheader(f"Gerando árvore para o verbo '{selected_verb}':")
 
@@ -207,9 +211,13 @@ if not filtered_questions.empty:
                 if selected_verb.lower() in question_lower:
                     # Dividir a pergunta em palavras e encontrar as palavras subsequentes ao verbo
                     words = question_lower.split()
-                    verb_index = words.index(selected_verb.lower())
+                    verb_index = words.index(selected_verb.lower())  # Encontrar a posição do verbo
                     subsequents = words[verb_index + 1:]  # Palavras após o verbo
-                    next_level.update({word: [] for word in subsequents[:num_words_per_level]})
+
+                    # Adicionar as palavras subsequentes à estrutura da árvore
+                    for word in subsequents[:num_words_per_level]:
+                        if word not in next_level:
+                            next_level[word] = {}  # Criar nó para a palavra subsequente
 
         current_level = next_level  # Atualiza o nível atual
 
@@ -228,9 +236,18 @@ if not filtered_questions.empty:
 
     add_edges(tree_structure)
 
+    # Verificar o grafo gerado
+    st.write("Grafo gerado pelo NetworkX:")
+    st.write(graph.edges)
+
     # Visualizar a árvore com PyVis
     net = Network(notebook=True, height="600px", width="100%", directed=True)
     net.from_nx(graph)
+
+    # Exibir a árvore interativa diretamente no Streamlit
+    st.components.v1.html(net.generate_html(), height=650, scrolling=True)
+else:
+    st.write(f"Nenhuma pergunta encontrada para o verbo '{selected_verb}'.")
 
     # Exibir a árvore interativa diretamente no Streamlit
     st.components.v1.html(net.generate_html(), height=650, scrolling=True)

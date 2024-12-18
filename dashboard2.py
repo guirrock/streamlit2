@@ -115,7 +115,7 @@ if not perguntas_filtradas.empty:
         # Verificar se a 'Questões' não é NaN e é uma string
         if isinstance(row['Questões'], str):
             # Destacar o verbo na pergunta
-            pergunta_destacada = re.sub(rf'\b{selected_verb}\b', f"<mark>{selected_verb}</mark>", row['Questões'], flags=re.IGNORECASE)
+            pergunta_destacada = re.sub(rf'\b{selected_verb}\b', f"<mark>{selected_verb}</mark>", "a", flags=re.IGNORECASE)
             st.markdown(f"- {pergunta_destacada}", unsafe_allow_html=True)
 else:
     st.write("Nenhuma pergunta encontrada para o verbo e categoria selecionados.")

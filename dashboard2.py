@@ -124,7 +124,7 @@ for row in perguntas_filtradas:
                             lambda match: f"<mark>{match.group()}</mark>", 
                             row['Questões'], 
                             flags=re.IGNORECASE)
-            perguntas_html += f"<p>a- {pergunta_destacada}</p>"
+            perguntas_html += f"<p>- {"a" + pergunta_destacada}</p>"
 
 # CSS para adicionar rolagem ao expansor
 css = '''

@@ -3,5 +3,4 @@ pandas
 spacy
 plotly
 wordtree
-re
 stanza

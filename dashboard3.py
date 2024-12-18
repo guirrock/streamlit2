@@ -109,7 +109,7 @@ else:
     perguntas_filtradas = pd.DataFrame()
 
 # Prefixo da palavra a ser destacada
-prefix = selected_verb[:5]  # Por exemplo, pega os primeiros 5 caracteres (ajuste conforme necessário)
+prefix = selected_verb[:3]  # Por exemplo, pega os primeiros 5 caracteres (ajuste conforme necessário)
 
 # Exibir as perguntas filtradas
 if not perguntas_filtradas.empty:

@@ -224,6 +224,7 @@ def build_word_tree_text(word_counts, root_word, max_depth=None):
         
         if word in word_counts:
             for next_word, count in word_counts[word].most_common():
+                st.write(f"Visitando: {next_word} (Nivel: {level})")  # Depuração
                 traverse(next_word, level + 1)
 
     traverse(root_word.lower(), 0)

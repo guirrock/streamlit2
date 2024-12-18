@@ -180,9 +180,6 @@ else:
 
 st.subheader('Criar Árvore de Palavras com o Verbo Selecionado')
 
-# Selecione o verbo
-selected_verb = st.selectbox('Escolha um verbo para a árvore:', verbos_selecionados)
-
 # Filtrar as perguntas com base no verbo selecionado
 filtered_questions = perguntas_df[perguntas_df['Questões'].str.contains(rf'\b{selected_verb}\b', case=False, na=False)]
 

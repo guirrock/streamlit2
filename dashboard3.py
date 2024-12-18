@@ -180,48 +180,36 @@ else:
 
 st.subheader('Criar Árvore de Palavras com o Verbo Selecionado')
 
-# Filtrar as perguntas com base no verbo selecionado
+# Selecione o verbo
 selected_verb = st.selectbox('Escolha um verbo para a árvore:', verbos_selecionados)
 
-# Filtrar o dataset para as perguntas que contêm o verbo selecionado
+# Filtrar as perguntas com base no verbo selecionado
 filtered_questions = perguntas_df[perguntas_df['Questões'].str.contains(rf'\b{selected_verb}\b', case=False, na=False)]
 
 if not filtered_questions.empty:
     st.subheader(f"Gerando árvore para o verbo '{selected_verb}':")
 
-    # Tokenizar as perguntas e extrair palavras subsequentes ao verbo
-    word_sequences = []
-    for question in filtered_questions['Questões']:
-        if isinstance(question, str):
-            tokens = word_tokenize(question.lower())  # Tokenizar a frase
-            try:
-                verb_index = tokens.index(selected_verb.lower())  # Encontra o índice do verbo
-                word_sequences.append(tokens[verb_index + 1:])  # Pega palavras após o verbo
-            except ValueError:
-                continue  # Ignora se o verbo não está presente
-
-    # Contar as palavras mais frequentes em cada nível da árvore
-    tree_structure = {selected_verb: {}}  # Raiz da árvore é o verbo
-    current_level = {selected_verb: word_sequences}  # Começa com o verbo e as palavras subsequentes
+    # Inicializar a estrutura da árvore
+    tree_structure = {selected_verb: {}}
+    current_level = {selected_verb: []}  # Começa com o verbo e as palavras subsequentes
 
     # Número de níveis e palavras por nível
     num_levels = 3
     num_words_per_level = 2
 
+    # Para cada nível, extrair palavras subsequentes ao verbo
     for level in range(num_levels):
         next_level = {}
         for node, sequences in current_level.items():
-            # Conta as palavras que aparecem após o nó atual
-            word_counter = Counter(word for seq in sequences for word in seq[:1])  # Apenas a próxima palavra
-            most_common_words = word_counter.most_common(num_words_per_level)
-
-            # Adiciona as palavras mais comuns ao próximo nível
-            tree_structure[node] = {}
-            for word, _ in most_common_words:
-                # Filtra as sequências para as palavras que começam com a palavra atual
-                filtered_sequences = [seq[1:] for seq in sequences if seq and seq[0] == word]
-                tree_structure[node][word] = {}
-                next_level[word] = filtered_sequences
+            for question in filtered_questions['Questões']:
+                # Para cada pergunta, procurar o verbo e pegar as palavras subsequentes
+                question_lower = question.lower()
+                if selected_verb.lower() in question_lower:
+                    # Dividir a pergunta em palavras e encontrar as palavras subsequentes ao verbo
+                    words = question_lower.split()
+                    verb_index = words.index(selected_verb.lower())
+                    subsequents = words[verb_index + 1:]  # Palavras após o verbo
+                    next_level.update({word: [] for word in subsequents[:num_words_per_level]})
 
         current_level = next_level  # Atualiza o nível atual
 
@@ -244,4 +232,3 @@ if not filtered_questions.empty:
     st.components.v1.html(open("tree.html", "r").read(), height=650, scrolling=True)
 else:
     st.write(f"Nenhuma pergunta encontrada para o verbo '{selected_verb}'.")
-

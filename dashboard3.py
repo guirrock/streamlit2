@@ -143,9 +143,7 @@ else:
     perguntas_filtradas = pd.DataFrame()
 
 # Prefixo da palavra a ser destacada
-prefix = re.escape(selected_verb[:3])  # Escapa caracteres especiais
-
-prefix = re.escape(selected_verb[:3])
+prefix = re.escape(selected_verb[:4])
 
 # Exibir as perguntas filtradas em uma área com barra de rolagem
 if not perguntas_filtradas.empty:

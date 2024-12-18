@@ -208,25 +208,29 @@ if not all_perguntas_filtradas.empty:
                 if words[i].lower().startswith(selected_verb[:4].lower()):
                     word_counts[words[i].lower()][words[i + 1].lower()] += 1
 
-# Construir a árvore de palavras
-G = nx.DiGraph()
+# Função para construir a representação textual da árvore de palavras
+def build_word_tree_text(word_counts, root_word):
+    tree_lines = []
+    visited = set()
 
-# Adicionar o nó raiz
-G.add_node(selected_verb, size=100, color='red')
+    def traverse(word, level):
+        if word in visited:
+            return
+        visited.add(word)
+        if level == 0:
+            tree_lines.append(word)
+        else:
+            tree_lines.append("    " * (level - 1) + "-> " + word)
+        
+        if word in word_counts:
+            for next_word, count in word_counts[word].most_common():
+                traverse(next_word, level + 1)
 
-# Adicionar nós e arestas
-for word, next_words in word_counts.items():
-    if word.startswith(selected_verb[:4].lower()):
-        for next_word, count in next_words.items():
-            # Adicionar o nó se ainda não existir
-            if next_word not in G:
-                G.add_node(next_word, size=80)
-            G.add_edge(word, next_word, weight=count)
+    traverse(root_word.lower(), 0)
+    return "\n".join(tree_lines)
 
-# Visualizar a árvore
-net = Network(height='600px', width='100%', notebook=True)
-net.from_nx(G)
-net.show('word_tree.html')
+# Construir a representação textual da árvore
+word_tree_text = build_word_tree_text(word_counts, selected_verb)
 
-# Exibir a árvore no Streamlit
-st.components.v1.html(open('word_tree.html', 'r').read(), height=600)
+# Exibir a árvore de palavras no Streamlit
+st.text_area("Árvore de Palavras", word_tree_text, height=400)

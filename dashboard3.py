@@ -213,6 +213,10 @@ if not filtered_questions.empty:
 
         current_level = next_level  # Atualiza o nível atual
 
+    # Exibir a árvore construída até o momento
+    st.write("Estrutura da árvore até agora:")
+    st.write(tree_structure)
+
     # Criar a árvore com NetworkX
     graph = nx.DiGraph()
 

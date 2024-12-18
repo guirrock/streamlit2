@@ -88,15 +88,21 @@ st.plotly_chart(fig)
 
 st.subheader('Filtrar perguntas por Verbo e Nível:')
 
-# Selecione um verbo e categoria para exibir as perguntas
-selected_verb = st.selectbox('Escolha um verbo:', verbos_selecionados)
-selected_category = st.selectbox('Escolha uma categoria de Bloom:', categorias_ordenadas)
-
-# Filtrar as perguntas que contêm o verbo selecionado (com str.contains) e a categoria de Bloom selecionada
-perguntas_filtradas = perguntas_df[
-    perguntas_df['Questões'].str.contains(r'\b' + selected_verb + r'\b', case=False, na=False)
-    & perguntas_df['Categoria'].str.contains(selected_category)
+# Filtrar o dataset de verbos com base no verbo e na categoria selecionados
+filtered_verbos = verbos_df[
+    (verbos_df['Verbo'] == selected_verb) & (verbos_df['Categoria'] == selected_category)
 ]
+
+# Obter os IDs das perguntas que contêm o verbo na categoria selecionada
+if not filtered_verbos.empty:
+    # IDs estão no formato "1/4/9". Precisamos dividi-los em uma lista de inteiros
+    question_ids = filtered_verbos['IDs_perguntas'].iloc[0].split('/')
+    question_ids = list(map(int, question_ids))  # Converter IDs para inteiros
+
+    # Filtrar as perguntas no DataFrame principal usando os IDs
+    perguntas_filtradas = perguntas_df[perguntas_df['id_pergunta'].isin(question_ids)]
+else:
+    perguntas_filtradas = pd.DataFrame()
 
 # Exibir as perguntas filtradas
 if not perguntas_filtradas.empty:

@@ -188,10 +188,10 @@ st.write("Perguntas filtradas:")
 st.write(filtered_questions)
 
 if not filtered_questions.empty:
-    st.subheader(f"Gerando sequência de palavras para o verbo '{selected_verb}':")
+    st.subheader(f"Gerando árvore de palavras para o verbo '{selected_verb}':")
 
-    # Criar uma lista para armazenar as representações de sequência
-    sequences = []
+    # Criar um dicionário para armazenar as sequências de palavras
+    word_tree = defaultdict(list)
 
     # Para cada pergunta, extrair as palavras subsequentes ao verbo
     for question in filtered_questions['Questões']:
@@ -204,14 +204,23 @@ if not filtered_questions.empty:
             verb_index = words.index(selected_verb.lower())
             subsequents = words[verb_index + 1:]  # Palavras após o verbo
 
-            # Criar a sequência com setas
-            sequence = " -> ".join([selected_verb] + subsequents)
-            sequences.append(sequence)
+            # Criação da estrutura de árvore com palavras subsequentes
+            current_node = word_tree
+            for word in subsequents:
+                # Adicionar a palavra ao nó atual ou mover para o próximo nível
+                current_node = current_node.setdefault(word, {})
 
-    # Exibir as sequências de palavras com setas
-    st.write("Sequências de palavras:")
-    for seq in sequences:
-        st.markdown(f"<p style='font-size: 18px; color: #333;'> {seq} </p>", unsafe_allow_html=True)
+    # Função recursiva para gerar a árvore de palavras como string
+    def print_tree(node, level=0):
+        result = ""
+        for word, sub_node in node.items():
+            result += "  " * level + f"-> {word}\n"
+            result += print_tree(sub_node, level + 1)
+        return result
+
+    # Gerar e exibir a árvore de palavras
+    tree_output = print_tree(word_tree)
+    st.text(tree_output)
 
 else:
     st.write(f"Nenhuma pergunta encontrada para o verbo '{selected_verb}'.")

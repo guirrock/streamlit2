@@ -86,6 +86,23 @@ fig.add_annotation(
 # Exibindo o gráfico no Streamlit
 st.plotly_chart(fig)
 
+# Adicionar estilo CSS para a área de rolagem fixa
+st.markdown(
+    """
+    <style>
+    .scrollable-box {
+        max-height: 300px; /* Altura fixa para a área */
+        overflow-y: auto; /* Adicionar barra de rolagem */
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 st.subheader('Filtrar perguntas por Verbo e Nível:')
 
 # Selecione um verbo e categoria para exibir as perguntas
@@ -99,9 +116,9 @@ filtered_verbos = df[
 
 # Obter os IDs das perguntas que contêm o verbo na categoria selecionada
 if not filtered_verbos.empty:
-    # IDs estão no formato "1/4/9". Precisamos dividi-los em uma lista de inteiros
-    question_ids = filtered_verbos['IDs_perguntas'].iloc[0].split('/')
-    question_ids = list(map(int, question_ids))  # Converter IDs para inteiros
+    question_ids = []
+    for ids in filtered_verbos['IDs_perguntas']:
+        question_ids.extend(map(int, ids.split('/')))  # Coletar todos os IDs das perguntas
 
     # Filtrar as perguntas no DataFrame principal usando os IDs
     perguntas_filtradas = perguntas_df[perguntas_df['id_pergunta'].isin(question_ids)]
@@ -109,19 +126,23 @@ else:
     perguntas_filtradas = pd.DataFrame()
 
 # Prefixo da palavra a ser destacada
-prefix = selected_verb[:3]  # Por exemplo, pega os primeiros 5 caracteres (ajuste conforme necessário)
+prefix = re.escape(selected_verb[:3])  # Escapa caracteres especiais
 
-# Exibir as perguntas filtradas
+# Exibir as perguntas filtradas em uma área com barra de rolagem
 if not perguntas_filtradas.empty:
-    st.subheader('Perguntas encontradas2:')
+    st.subheader(f"Perguntas filtradas para '{selected_verb}' em '{selected_category}':")
+    st.markdown('<div class="scrollable-box">', unsafe_allow_html=True)
     for index, row in perguntas_filtradas.iterrows():
         # Verificar se a 'Questões' não é NaN e é uma string
         if isinstance(row['Questões'], str):
             # Destacar o verbo na pergunta
-            pergunta_destacada = re.sub(rf'\b{prefix}\w*\b', 
-                            lambda match: f"<mark>{match.group()}</mark>", 
-                            row['Questões'], 
-                            flags=re.IGNORECASE)
+            pergunta_destacada = re.sub(
+                rf'\b{prefix}[a-zA-Z]*\b',
+                lambda match: f"<mark>{match.group()}</mark>",
+                row['Questões'],
+                flags=re.IGNORECASE
+            )
             st.markdown(f"- {pergunta_destacada}", unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 else:
-    st.write("Nenhuma pergunta encontrada para o verbo e categoria selecionados.")
+    st.write(f"Nenhuma pergunta encontrada para o verbo '{selected_verb}' e categoria '{selected_category}'.")

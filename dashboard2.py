@@ -115,29 +115,16 @@ st.subheader('Perguntas encontradas:')
 
 # Gerar o conteúdo das perguntas
 perguntas_html = ""
-for row in perguntas_filtradas:
-    if row['Categoria'] == selected_category:  # Filtrar pela categoria
-        if isinstance(row['Questões'], str):
+#for row in perguntas_filtradas:
+ #   if row['Categoria'] == selected_category:  # Filtrar pela categoria
+  #      if isinstance(row['Questões'], str):
             # Destacar o verbo na pergunta
             # Substitui palavras que começam com o prefixo
             #pergunta_destacada = re.sub(rf'\b{prefix}\w*\b', 
-                            lambda match: f"<mark>{match.group()}</mark>", 
-                            row['Questões'], 
-                            flags=re.IGNORECASE)
+   #                         lambda match: f"<mark>{match.group()}</mark>", 
+    ##                       flags=re.IGNORECASE)
             #perguntas_html += f"<p>- {pergunta_destacada}</p>"
 
-# CSS para adicionar rolagem ao expansor
-css = '''
-<style>
-    [data-testid="stExpander"] div:has(>.streamlit-expanderContent) {
-        overflow: scroll;
-        height: 400px; /* Defina a altura desejada */
-    }
-</style>
-'''
-
-# Exibir o expansor com as perguntas e rolagem
-st.markdown(css, unsafe_allow_html=True)
 
 with st.expander('Perguntas encontradas:'):
     st.markdown(perguntas_html, unsafe_allow_html=True)

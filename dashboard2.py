@@ -88,6 +88,12 @@ st.plotly_chart(fig)
 
 st.subheader('Filtrar perguntas por Verbo e Nível:')
 
+# Inicializar o Stanza
+stanza.download('pt')
+nlp = stanza.Pipeline('pt', processors='tokenize,mwt,pos,lemma', use_gpu=True)
+
+st.subheader('Filtrar perguntas por Verbo e Nível:')
+
 # Selecione um verbo e categoria para exibir as perguntas
 selected_verb = st.selectbox('Escolha um verbo:', verbos_selecionados)
 selected_category = st.selectbox('Escolha uma categoria de Bloom:', categorias_ordenadas)
@@ -99,7 +105,6 @@ filtered_verbos = df[
 
 # Obter os IDs das perguntas que contêm o verbo na categoria selecionada
 if not filtered_verbos.empty:
-    # IDs estão no formato "1/4/9". Precisamos dividi-los em uma lista de inteiros
     question_ids = filtered_verbos['IDs_perguntas'].iloc[0].split('/')
     question_ids = list(map(int, question_ids))  # Converter IDs para inteiros
 
@@ -108,14 +113,23 @@ if not filtered_verbos.empty:
 else:
     perguntas_filtradas = pd.DataFrame()
 
-# Exibir as perguntas filtradas
+# Exibir as perguntas filtradas com destaque nas flexões do verbo
 if not perguntas_filtradas.empty:
     st.subheader('Perguntas encontradas:')
     for index, row in perguntas_filtradas.iterrows():
-        # Verificar se a 'Questões' não é NaN e é uma string
         if isinstance(row['Questões'], str):
-            # Destacar o verbo na pergunta
-            pergunta_destacada = re.sub(rf'\b{selected_verb}\b', f"<mark>{selected_verb}</mark>", row['Questões'], flags=re.IGNORECASE)
-            st.markdown(f"- {pergunta_destacada}", unsafe_allow_html=True)
+            # Processar a pergunta com Stanza para obter os lemas
+            doc = nlp(row['Questões'])
+            lemas_pergunta = [word.lemma for sentence in doc.sentences for word in sentence.words]
+
+            # Verificar se o verbo selecionado (lematizado) está na lista de lemas
+            if selected_verb in lemas_pergunta:
+                # Criar um padrão regex para destacar todas as flexões do verbo
+                pattern = r'\b(?:' + '|'.join(re.escape(word.text) for sentence in doc.sentences for word in sentence.words if word.lemma == selected_verb) + r')\b'
+                pergunta_destacada = re.sub(pattern, lambda match: f"<mark>{match.group(0)}</mark>", row['Questões'], flags=re.IGNORECASE)
+
+                # Mostrar a pergunta destacada
+                st.markdown(f"- {pergunta_destacada}", unsafe_allow_html=True)
 else:
     st.write("Nenhuma pergunta encontrada para o verbo e categoria selecionados.")
+

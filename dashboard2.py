@@ -89,16 +89,6 @@ st.plotly_chart(fig)
 
 st.subheader('Filtrar perguntas por Verbo e Nível:')
 
-!pip install stanza
-
-
-# Baixar o modelo da língua portuguesa (uma vez)
-stanza.download('pt')
-
-nlp = stanza.Pipeline('pt', processors='tokenize,mwt,pos,lemma', use_gpu=True)
-
-st.subheader('Filtrar perguntas por Verbo e Nível:')
-
 # Selecione um verbo e categoria para exibir as perguntas
 selected_verb = st.selectbox('Escolha um verbo:', verbos_selecionados)
 selected_category = st.selectbox('Escolha uma categoria de Bloom:', categorias_ordenadas)

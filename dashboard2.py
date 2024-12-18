@@ -110,20 +110,27 @@ else:
 
 st.subheader('Perguntas encontradas:')
 
-if not perguntas_filtradas.empty:
-    # Gerar o conteúdo das perguntas
-    perguntas_html = ""
-    for index, row in perguntas_filtradas.iterrows():
+# Gerar o conteúdo das perguntas
+perguntas_html = ""
+for row in perguntas_filtradas:
+    if row['Categoria'] == selected_category:  # Filtrar pela categoria
         if isinstance(row['Questões'], str):
             # Destacar o verbo na pergunta
             pergunta_destacada = re.sub(rf'\b{selected_verb}\b', f"<mark>{selected_verb}</mark>", row['Questões'], flags=re.IGNORECASE)
-            perguntas_html += f"<p>{pergunta_destacada}</p>"
+            perguntas_html += f"<p>- {pergunta_destacada}</p>"
 
-    # Criar uma div com barra de rolagem utilizando CSS dentro do markdown
-    st.markdown(f"""
-        <div style="max-height: 400px; overflow-y: scroll; padding: 10px; border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9;">
-            {perguntas_html}
-        </div>
-    """, unsafe_allow_html=True)
-else:
-    st.write("Nenhuma pergunta encontrada para o verbo e categoria selecionados.")
+# CSS para adicionar rolagem ao expansor
+css = '''
+<style>
+    [data-testid="stExpander"] div:has(>.streamlit-expanderContent) {
+        overflow: scroll;
+        height: 400px; /* Defina a altura desejada */
+    }
+</style>
+'''
+
+# Exibir o expansor com as perguntas e rolagem
+st.markdown(css, unsafe_allow_html=True)
+
+with st.expander('Perguntas encontradas:'):
+    st.markdown(perguntas_html, unsafe_allow_html=True)

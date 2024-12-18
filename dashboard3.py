@@ -190,58 +190,36 @@ st.write(filtered_questions)
 if not filtered_questions.empty:
     st.subheader(f"Gerando árvore para o verbo '{selected_verb}':")
 
-    # Inicializar a estrutura da árvore
-    tree_structure = {selected_verb: {}}
-    current_level = {selected_verb: []}  # Começa com o verbo e as palavras subsequentes
-
-    # Número de níveis e palavras por nível
-    num_levels = 2
-    num_words_per_level = 2
-
-    # Para cada nível, extrair palavras subsequentes ao verbo
-    for level in range(num_levels):
-        next_level = {}
-        for node, sequences in current_level.items():
-            for question in filtered_questions['Questões']:
-                # Para cada pergunta, procurar o verbo e pegar as palavras subsequentes
-                question_lower = question.lower()
-                if selected_verb.lower() in question_lower:
-                    # Dividir a pergunta em palavras e encontrar as palavras subsequentes ao verbo
-                    words = question_lower.split()
-                    verb_index = words.index(selected_verb.lower())  # Encontrar a posição do verbo
-                    subsequents = words[verb_index + 1:]  # Palavras após o verbo
-
-                    # Adicionar as palavras subsequentes à estrutura da árvore
-                    for word in subsequents[:num_words_per_level]:
-                        if word not in next_level:
-                            next_level[word] = {}  # Criar nó para a palavra subsequente
-
-        current_level = next_level  # Atualiza o nível atual
-
-    # Exibir a árvore construída até o momento
-    st.write("Estrutura da árvore até agora:")
-    st.write(tree_structure)
-
-    # Criar a árvore com NetworkX
+    # Criar um grafo para armazenar a árvore de palavras
     graph = nx.DiGraph()
 
-    def add_edges(tree, parent=None):
-        for node, children in tree.items():
-            if parent:
-                graph.add_edge(parent, node)  # Adiciona aresta entre nós
-            add_edges(children, node)
+    # Adicionar o verbo como nó raiz
+    graph.add_node(selected_verb)
 
-    add_edges(tree_structure)
+    # Para cada pergunta, extrair as palavras subsequentes ao verbo
+    for question in filtered_questions['Questões']:
+        question_lower = question.lower()
+        if selected_verb.lower() in question_lower:
+            # Dividir a pergunta em palavras
+            words = question_lower.split()
 
-    # Verificar o grafo gerado
-    st.write("Grafo gerado pelo NetworkX:")
-    st.write(graph.edges)
+            # Encontrar o índice do verbo na lista de palavras
+            verb_index = words.index(selected_verb.lower())
+            subsequents = words[verb_index + 1:]  # Palavras após o verbo
 
-    # Visualizar a árvore com PyVis
+            # Adicionar as palavras subsequentes ao grafo
+            previous_word = selected_verb
+            for word in subsequents:
+                graph.add_node(word)  # Adicionar palavra ao grafo
+                graph.add_edge(previous_word, word)  # Adicionar aresta do verbo para a palavra subsequente
+                previous_word = word  # Atualizar a palavra anterior
+
+    # Criar a visualização da árvore usando PyVis
     net = Network(notebook=True, height="600px", width="100%", directed=True)
     net.from_nx(graph)
 
     # Exibir a árvore interativa diretamente no Streamlit
     st.components.v1.html(net.generate_html(), height=650, scrolling=True)
+
 else:
     st.write(f"Nenhuma pergunta encontrada para o verbo '{selected_verb}'.")

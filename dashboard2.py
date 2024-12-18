@@ -107,3 +107,15 @@ if not filtered_verbos.empty:
     perguntas_filtradas = perguntas_df[perguntas_df['id_pergunta'].isin(question_ids)]
 else:
     perguntas_filtradas = pd.DataFrame()
+
+# Exibir as perguntas filtradas
+if not perguntas_filtradas.empty:
+    st.subheader('Perguntas encontradas:')
+    for index, row in perguntas_filtradas.iterrows():
+        # Verificar se a 'Questões' não é NaN e é uma string
+        if isinstance(row['Questões'], str):
+            # Destacar o verbo na pergunta
+            pergunta_destacada = re.sub(rf'\b{selected_verb}\b', f"<mark>{selected_verb}</mark>", row['Questões'], flags=re.IGNORECASE)
+            st.markdown(f"- {pergunta_destacada}", unsafe_allow_html=True)
+else:
+    st.write("Nenhuma pergunta encontrada para o verbo e categoria selecionados.")

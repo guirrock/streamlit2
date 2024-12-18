@@ -191,7 +191,7 @@ if not filtered_questions.empty:
     st.subheader(f"Gerando árvore de palavras para o verbo '{selected_verb}':")
 
     # Criar um dicionário para armazenar as sequências de palavras
-    word_tree = defaultdict(list)
+    word_tree = defaultdict(dict)
 
     # Para cada pergunta, extrair as palavras subsequentes ao verbo
     for question in filtered_questions['Questões']:

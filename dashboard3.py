@@ -188,13 +188,10 @@ st.write("Perguntas filtradas:")
 st.write(filtered_questions)
 
 if not filtered_questions.empty:
-    st.subheader(f"Gerando árvore para o verbo '{selected_verb}':")
+    st.subheader(f"Gerando sequência de palavras para o verbo '{selected_verb}':")
 
-    # Criar um grafo para armazenar a árvore de palavras
-    graph = nx.DiGraph()
-
-    # Adicionar o verbo como nó raiz
-    graph.add_node(selected_verb)
+    # Criar uma lista para armazenar as representações de sequência
+    sequences = []
 
     # Para cada pergunta, extrair as palavras subsequentes ao verbo
     for question in filtered_questions['Questões']:
@@ -207,19 +204,14 @@ if not filtered_questions.empty:
             verb_index = words.index(selected_verb.lower())
             subsequents = words[verb_index + 1:]  # Palavras após o verbo
 
-            # Adicionar as palavras subsequentes ao grafo
-            previous_word = selected_verb
-            for word in subsequents:
-                graph.add_node(word)  # Adicionar palavra ao grafo
-                graph.add_edge(previous_word, word)  # Adicionar aresta do verbo para a palavra subsequente
-                previous_word = word  # Atualizar a palavra anterior
+            # Criar a sequência com setas
+            sequence = " -> ".join([selected_verb] + subsequents)
+            sequences.append(sequence)
 
-    # Criar a visualização da árvore usando PyVis
-    net = Network(notebook=True, height="600px", width="100%", directed=True)
-    net.from_nx(graph)
-
-    # Exibir a árvore interativa diretamente no Streamlit
-    st.components.v1.html(net.generate_html(), height=650, scrolling=True)
+    # Exibir as sequências de palavras com setas
+    st.write("Sequências de palavras:")
+    for seq in sequences:
+        st.markdown(f"<p style='font-size: 18px; color: #333;'> {seq} </p>", unsafe_allow_html=True)
 
 else:
     st.write(f"Nenhuma pergunta encontrada para o verbo '{selected_verb}'.")

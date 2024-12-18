@@ -89,7 +89,7 @@ st.plotly_chart(fig)
 st.subheader('Filtrar perguntas por Verbo e Nível:')
 
 # Filtrar o dataset de verbos com base no verbo e na categoria selecionados
-filtered_verbos = verbos_df[
+filtered_verbos = df[
     (verbos_df['Verbo'] == selected_verb) & (verbos_df['Categoria'] == selected_category)
 ]
 

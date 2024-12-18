@@ -120,11 +120,11 @@ for row in perguntas_filtradas:
         if isinstance(row['Questões'], str):
             # Destacar o verbo na pergunta
             # Substitui palavras que começam com o prefixo
-            pergunta_destacada = re.sub(rf'\b{prefix}\w*\b', 
+            #pergunta_destacada = re.sub(rf'\b{prefix}\w*\b', 
                             lambda match: f"<mark>{match.group()}</mark>", 
                             row['Questões'], 
                             flags=re.IGNORECASE)
-            perguntas_html += f"<p>- {"a" + pergunta_destacada}</p>"
+            #perguntas_html += f"<p>- {pergunta_destacada}</p>"
 
 # CSS para adicionar rolagem ao expansor
 css = '''

@@ -97,3 +97,4 @@ if not exemplos.empty:
         st.write(f"**Questão**: {row['Questões']}")  # Use a coluna original de 'Questões'
 else:
     st.write("Não foram encontradas questões para esse verbo.")
+#

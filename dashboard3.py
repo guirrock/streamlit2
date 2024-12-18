@@ -8,6 +8,9 @@ from nltk.tokenize import word_tokenize
 from collections import Counter
 import re
 
+import nltk
+nltk.download('punkt')
+
 # Adicionar estilo CSS para a área de rolagem fixa
 st.markdown(
     """

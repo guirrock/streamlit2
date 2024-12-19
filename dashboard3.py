@@ -186,6 +186,4 @@ documents = perguntas_df[coluna].tolist()
 
 g = wordtree.search_and_draw(corpus = documents, keyword = selected_verb)
 
-a = g._repr_image_svg_xml()
-
-print(a)
+g.render()

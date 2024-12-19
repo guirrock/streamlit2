@@ -186,4 +186,12 @@ documents = perguntas_df[coluna].tolist()
 
 g = wordtree.search_and_draw(corpus = documents, keyword = selected_verb)
 
-g.render()
+# Gerar a saída em SVG
+svg_data = g.pipe(format='svg')
+
+# Decodificar para string se necessário
+svg_text = svg_data.decode('utf-8')
+
+# Exibir no navegador
+html_code = f'<div>{svg_text}</div>'
+print(html_code)

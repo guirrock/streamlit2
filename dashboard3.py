@@ -189,12 +189,11 @@ documents = perguntas_df[coluna].tolist()
 # Gerar a árvore de palavras
 g = wordtree.search_and_draw(corpus=documents, keyword=selected_verb)
 
-# Salvar a figura em um buffer
-buf = BytesIO()
-g.figure.savefig(buf, format='png')
-buf.seek(0)
+# Renderizar a árvore de palavras em formato PNG
+png_data = g.pipe(format='png')
 
-# Fechar a figura para liberar memória
+# Exibir a imagem no Streamlit
+st.image(png_data, caption='Árvore de Palavras', use_container_width=True)
 plt.close(g.figure)
 
 # Exibir a imagem no Streamlit

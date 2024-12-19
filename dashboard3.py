@@ -178,26 +178,29 @@ else:
 
 
 
-
 # Substitua 'coluna_desejada' pelo nome da coluna que você quer extrair
 coluna = 'Questões'
 
 # Criar a lista 'documents' com os textos da coluna
 documents = perguntas_df[coluna].tolist()
 
-# Criar o WordTree e gerar o gráfico
-g = wordtree.search_and_draw(corpus=documents, keyword="usar")
+# Simular o "wordtree" com pyvis
+net = Network(height="100%", width="100%", directed=True)
 
-# Salvar como PNG com pydot
-graph = pydot.graph_from_dot_data(g.source)
-output_path = "wordtree_output.png"
-graph[0].write_png(output_path)
+# Adicionar os nós e conexões
+for doc in documents:
+    if selected_verb in doc:
+        net.add_node(selected_verb, label=selected_verb, color="red", size=20)
+        net.add_node(doc, label=doc, color="blue", size=15)
+        net.add_edge(selected_verb, doc)
 
-# Converter para base64
-with open(output_path, "rb") as image_file:
-    base64_image = base64.b64encode(image_file.read()).decode("utf-8")
+# Gerar o gráfico como HTML
+net.save_graph("wordtree_interativo.html")
 
-# Exibir no navegador com HTML
-html_code = f'<img src="data:image/png;base64,{base64_image}" alt="WordTree">'
-print(html_code)
+# Ler o HTML gerado e exibir no Streamlit
+with open("wordtree_interativo.html", "r") as f:
+    html_data = f.read()
+
+# Exibir no navegador com Streamlit
+st.components.v1.html(html_data, height=600)
 

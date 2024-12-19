@@ -186,19 +186,19 @@ coluna = 'Questões'
 # Criar a lista 'documents' com os textos da coluna
 documents = perguntas_df[coluna].tolist()
 
-g = wordtree.search_and_draw(corpus = documents, keyword = "buscar")
-output_path = "wordtree_output.png"
-g.render(filename=output_path, format="png", cleanup=True)
+# Criar o WordTree e gerar o gráfico
+g = wordtree.search_and_draw(corpus=documents, keyword="usar")
 
-# Converter o PNG gerado em base64
+# Salvar como PNG com pydot
+graph = pydot.graph_from_dot_data(g.source)
+output_path = "wordtree_output.png"
+graph[0].write_png(output_path)
+
+# Converter para base64
 with open(output_path, "rb") as image_file:
     base64_image = base64.b64encode(image_file.read()).decode("utf-8")
 
-# Exibir no navegador como HTML
+# Exibir no navegador com HTML
 html_code = f'<img src="data:image/png;base64,{base64_image}" alt="WordTree">'
 print(html_code)
-
-# Para usar no Streamlit
-import streamlit as st
-st.markdown(html_code, unsafe_allow_html=True)
 

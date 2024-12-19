@@ -8,7 +8,7 @@ from nltk.tokenize import word_tokenize
 from collections import Counter
 import re
 from collections import defaultdict
-
+import wordtree
 
 # Adicionar estilo CSS para a área de rolagem fixa
 st.markdown(
@@ -178,60 +178,14 @@ else:
 
 
 
+# Substitua 'coluna_desejada' pelo nome da coluna que você quer extrair
+coluna = 'Questões'
 
+# Criar a lista 'documents' com os textos da coluna
+documents = perguntas_df[coluna].tolist()
 
+g = wordtree.search_and_draw(corpus = documents, keyword = "buscar")
 
-st.subheader('Árvore de Palavras')
+a = g._repr_image_svg_xml()
 
-# Filtrar todas as perguntas que contêm o verbo selecionado (independente do nível)
-filtered_all_questions = df[df['Keyword'] == selected_verb]
-
-# Obter os IDs das perguntas que contêm o verbo selecionado
-if not filtered_all_questions.empty:
-    all_question_ids = []
-    for ids in filtered_all_questions['IDs_perguntas']:
-        all_question_ids.extend(map(int, ids.split('/')))  # Coletar todos os IDs das perguntas
-
-    # Filtrar as perguntas no DataFrame principal usando os IDs
-    all_perguntas_filtradas = perguntas_df[perguntas_df['id_pergunta'].isin(all_question_ids)]
-else:
-    all_perguntas_filtradas = pd.DataFrame()
-
-# Contar as palavras que seguem o verbo selecionado diretamente nas perguntas
-word_counts = defaultdict(Counter)
-
-if not all_perguntas_filtradas.empty:
-    for index, row in all_perguntas_filtradas.iterrows():
-        if isinstance(row['Questões'], str):
-            words = row['Questões'].split()
-            for i in range(len(words) - 1):
-                if words[i].lower().startswith(selected_verb[:4].lower()):
-                    word_counts[words[i].lower()][words[i + 1].lower()] += 1
-
-# Função para construir a representação textual da árvore de palavras
-def build_word_tree_text(word_counts, root_word, max_depth=None, top_n=2):
-    tree_lines = []
-    visited = set()
-
-    def traverse(word, level):
-        if (word, level) in visited or (max_depth is not None and level > max_depth):
-            return
-        visited.add((word, level))
-        if level == 0:
-            tree_lines.append(word)
-        else:
-            tree_lines.append("    " * (level - 1) + "-> " + word)
-        
-        if word in word_counts:
-            for next_word, count in word_counts[word].most_common(top_n):
-                traverse(next_word, level + 1)
-                
-    traverse(root_word.lower(), 0)
-    return "\n".join(tree_lines)
-
-# Construir a representação textual da árvore com profundidade máxima para teste
-word_tree_text = build_word_tree_text(word_counts, selected_verb, max_depth=10, top_n=20)
-
-# Exibir a árvore de palavras no Streamlit
-st.text_area("Árvore de Palavras", word_tree_text, height=400)
-
+print(a)

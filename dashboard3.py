@@ -8,7 +8,7 @@ from nltk.tokenize import word_tokenize
 from collections import Counter
 import re
 from collections import defaultdict
-import wordtree
+from wordtree import wordTree
 from graphviz import Digraph
 
 # Adicionar estilo CSS para a área de rolagem fixa
@@ -185,7 +185,7 @@ coluna = 'Questões'
 # Criar a lista 'documents' com os textos da coluna
 documents = perguntas_df[coluna].tolist()
 
-g = wordTree.search_and_draw(corpus=documents, keyword=selected_verb)
+g = wordtree.search_and_draw(corpus = documents, keyword = "buscar")
 output_path = "wordtree_output.png"
 g.render(filename=output_path, format="png", cleanup=True)
 

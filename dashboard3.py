@@ -188,7 +188,7 @@ documents = perguntas_df[coluna].tolist()
 
 # Gerar a árvore de palavras
 plt.figure(figsize=(10, 6))  # Ajuste o tamanho da figura conforme necessário
-wordtree.search_and_draw(corpus=documents, keyword="buscar")
+g = wordtree.search_and_draw(corpus=documents, keyword="buscar")
 
 # Salvar a figura em um buffer
 buf = BytesIO()

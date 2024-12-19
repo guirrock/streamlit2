@@ -184,23 +184,13 @@ coluna = 'Questões'
 # Criar a lista 'documents' com os textos da coluna
 documents = perguntas_df[coluna].tolist()
 
-# Simular o "wordtree" com pyvis
-net = Network(height="100%", width="100%", directed=True)
+# Gerar a árvore de palavras
+g = wordtree.search_and_draw(corpus=documents, keyword="buscar")
 
-# Adicionar os nós e conexões
-for doc in documents:
-    if selected_verb in doc:
-        net.add_node(selected_verb, label=selected_verb, color="red", size=20)
-        net.add_node(doc, label=doc, color="blue", size=15)
-        net.add_edge(selected_verb, doc)
+# Salvar a figura em um buffer
+buf = BytesIO()
+plt.savefig(buf, format='png')
+buf.seek(0)
 
-# Gerar o gráfico como HTML
-net.save_graph("wordtree_interativo.html")
-
-# Ler o HTML gerado e exibir no Streamlit
-with open("wordtree_interativo.html", "r") as f:
-    html_data = f.read()
-
-# Exibir no navegador com Streamlit
-st.components.v1.html(html_data, height=600)
-
+# Exibir a imagem no Streamlit
+st.image(buf, caption='Árvore de Palavras', use_column_width=True)

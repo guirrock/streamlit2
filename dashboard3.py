@@ -8,7 +8,7 @@ from nltk.tokenize import word_tokenize
 from collections import Counter
 import re
 from collections import defaultdict
-from wordtree import wordTree
+import wordtree
 from graphviz import Digraph
 
 # Adicionar estilo CSS para a área de rolagem fixa

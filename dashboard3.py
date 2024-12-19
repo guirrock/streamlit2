@@ -181,7 +181,7 @@ else:
 
 
 
-st.subheader('Árvore de Palavras para Perguntas com o Verbo Selecionado')
+st.subheader('Árvore de Palavras')
 
 # Filtrar todas as perguntas que contêm o verbo selecionado (independente do nível)
 filtered_all_questions = df[df['Keyword'] == selected_verb]

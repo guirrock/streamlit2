@@ -195,4 +195,4 @@ plt.savefig(buf, format='png')
 buf.seek(0)
 
 # Exibir a imagem no Streamlit
-st.image(buf, caption='Árvore de Palavras', use_column_width=True)
+st.image(buf, caption='Árvore de Palavras', use_container_width=True)

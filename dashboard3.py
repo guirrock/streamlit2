@@ -220,7 +220,7 @@ def build_word_tree_text(word_counts, root_word, max_depth=None, top_n=2):
         if level == 0:
             tree_lines.append(word)
         else:
-            tree_lines.append("    " * (level - 1) + "-> " + word)
+            tree_lines.append("    " * (level - 1) + "-> " + word + dict(word_counts))
         
         if word in word_counts:
             for next_word, count in word_counts[word].most_common(top_n):
@@ -230,7 +230,7 @@ def build_word_tree_text(word_counts, root_word, max_depth=None, top_n=2):
     return "\n".join(tree_lines)
 
 # Construir a representação textual da árvore com profundidade máxima para teste
-word_tree_text = build_word_tree_text(word_counts, selected_verb, max_depth=10, top_n=10)
+word_tree_text = build_word_tree_text(word_counts, selected_verb, max_depth=10, top_n=20)
 
 # Exibir a árvore de palavras no Streamlit
 st.text_area("Árvore de Palavras", word_tree_text, height=400)

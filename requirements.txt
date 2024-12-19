@@ -8,3 +8,4 @@ pyvis
 nltk
 graphviz
 pygraphviz
+pydot

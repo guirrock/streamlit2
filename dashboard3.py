@@ -231,12 +231,9 @@ def build_word_tree_text(word_counts, root_word, max_depth=None, top_n=2):
     return "\n".join(tree_lines)
 
 # Construir a representação textual da árvore com profundidade máxima para teste
-max_depth = st.slider('Selecione a profundidade máxima da árvore para exibir:', min_value=1, max_value=10, value=3)
+for i in range(5):
+    word_tree_text = build_word_tree_text(word_counts, selected_verb, max_depth=max_depth, top_n=2)
 
-word_tree_text = build_word_tree_text(word_counts, selected_verb, max_depth=max_depth, top_n=2)
+    # Exibir a árvore de palavras no Streamlit
+    st.text_area("Árvore de Palavras", word_tree_text, height=400)
 
-# Exibir a árvore de palavras no Streamlit
-st.text_area("Árvore de Palavras", word_tree_text, height=400)
-
-# Mostrar a estrutura de word_counts para depuração
-st.write("Estrutura de word_counts:", dict(word_counts))

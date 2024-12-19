@@ -214,9 +214,9 @@ def build_word_tree_text(word_counts, root_word, max_depth=None, top_n=2):
     visited = set()
 
     def traverse(word, level):
-        if word in visited or (max_depth is not None and level > max_depth):
+        if (word, level) in visited or (max_depth is not None and level > max_depth):
             return
-        visited.add(word)
+        visited.add((word, level))
         if level == 0:
             tree_lines.append(word)
         else:

@@ -187,12 +187,14 @@ coluna = 'Questões'
 documents = perguntas_df[coluna].tolist()
 
 # Gerar a árvore de palavras
-g = wordtree.search_and_draw(corpus=documents, keyword="buscar")
+plt.figure(figsize=(10, 6))  # Ajuste o tamanho da figura conforme necessário
+wordtree.search_and_draw(corpus=documents, keyword="buscar")
 
 # Salvar a figura em um buffer
 buf = BytesIO()
 plt.savefig(buf, format='png')
 buf.seek(0)
+plt.close()  # Fechar a figura para liberar memória
 
 # Exibir a imagem no Streamlit
 st.image(buf, caption='Árvore de Palavras', use_container_width=True)

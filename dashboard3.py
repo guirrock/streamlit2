@@ -220,7 +220,7 @@ def build_word_tree_text(word_counts, root_word, max_depth=None, top_n=2):
         if level == 0:
             tree_lines.append(word)
         else:
-            tree_lines.append("    " * (level - 1) + "-> " + word + dict(word_counts))
+            tree_lines.append("    " * (level - 1) + "-> " + word + word_counts)
         
         if word in word_counts:
             for next_word, count in word_counts[word].most_common(top_n):

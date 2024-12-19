@@ -1,5 +1,6 @@
 import pandas as pd
 import plotly.graph_objects as go
+import matplotlib.pyplot as plt
 import streamlit as st
 import re
 import networkx as nx

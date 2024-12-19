@@ -10,6 +10,7 @@ import re
 from collections import defaultdict
 import wordtree
 from graphviz import Digraph
+import base64
 
 # Adicionar estilo CSS para a área de rolagem fixa
 st.markdown(

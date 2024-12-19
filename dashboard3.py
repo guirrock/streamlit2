@@ -185,7 +185,7 @@ coluna = 'Questões'
 # Criar a lista 'documents' com os textos da coluna
 documents = perguntas_df[coluna].tolist()
 
-g = WordTree.search_and_draw(corpus=documents, keyword=selected_verb)
+g = wordTree.search_and_draw(corpus=documents, keyword=selected_verb)
 output_path = "wordtree_output.png"
 g.render(filename=output_path, format="png", cleanup=True)
 

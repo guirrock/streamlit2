@@ -221,6 +221,10 @@ def build_word_tree_text(word_counts, root_word, max_depth=None, top_n=2):
             tree_lines.append(word)
         else:
             tree_lines.append("    " * (level - 1) + "-> " + word)
+        
+        if word in word_counts:
+            for next_word, count in word_counts[word].most_common(top_n):
+                traverse(next_word, level + 1)
                 
     traverse(root_word.lower(), 0)
     return "\n".join(tree_lines)

@@ -12,6 +12,7 @@ from collections import defaultdict
 import wordtree
 from graphviz import Digraph
 from io import BytesIO
+import base64
 
 # Adicionar estilo CSS para a área de rolagem fixa
 st.markdown(
@@ -180,6 +181,18 @@ else:
 
 
 
+
+def render_image(filepath: str):
+   """
+   filepath: path to the image. Must have a valid file extension.
+   """
+   mime_type = filepath.split('.')[-1:][0].lower()
+   with open(filepath, "rb") as f:
+   content_bytes = f.read()
+   content_b64encoded = base64.b64encode(content_bytes).decode()
+   image_string = f'data:image/{mime_type};base64,{content_b64encoded}'
+   st.image(image_string)
+
 # Substitua 'coluna_desejada' pelo nome da coluna que você quer extrair
 coluna = 'Questões'
 
@@ -188,13 +201,13 @@ documents = perguntas_df[coluna].tolist()
 
 # Gerar a árvore de palavras
 g = wordtree.search_and_draw(corpus=documents, keyword=selected_verb)
-
+render_image(g.filepath)
 # Renderizar a árvore de palavras em formato PNG
-png_data = g.pipe(format='png')
+#png_data = g.pipe(format='png')
 
 # Exibir a imagem no Streamlit
-st.image(png_data, caption='Árvore de Palavras', use_container_width=True)
-plt.close(g.figure)
+#st.image(png_data, caption='Árvore de Palavras', use_container_width=True)
+#plt.close(g.figure)
 
 # Exibir a imagem no Streamlit
-st.image(buf, caption='Árvore de Palavras', use_container_width=True)
+#st.image(buf, caption='Árvore de Palavras', use_container_width=True)

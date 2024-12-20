@@ -14,6 +14,7 @@ import graphviz
 from io import BytesIO
 import base64
 from wordcloud import WordCloud
+import random
 
 st.set_page_config(
     layout="wide",  # Define o layout para usar a largura total

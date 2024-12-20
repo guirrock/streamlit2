@@ -191,7 +191,7 @@ coluna = 'Questões'
 # Criar a lista 'documents' com os textos da coluna
 documents = perguntas_filtradas[coluna].tolist()
 
-g = wordtree.search_and_draw(corpus = documents, keyword = prefix)
+g = wordtree.search_and_draw(corpus = documents, keyword = "expli")
 
 # Salva a definição DOT
 dot_representation = g.source

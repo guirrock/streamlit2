@@ -214,7 +214,7 @@ except Exception as e:
 
 st.subheader(f"Núvem de Palavras para a categoria '{selected_category}' e Verbo '{selected_verb}':")
 
-all_summary = " ".join(s for s in questoes_bt1 = perguntas_df[perguntas_df['Categoria'] == selected_category]['Questões'])
+all_summary = " ".join(s for s in perguntas_df[perguntas_df['Categoria'] == selected_category]['Questões'])
 # lista de stopword
 stopwords = set(STOPWORDS)
 stopwords.update(["da", "meu", "em", "você", "de", "ao", "os"])

@@ -13,7 +13,6 @@ import wordtree
 import graphviz
 from io import BytesIO
 import base64
-from wordcloud import WordCloud
 import random
 import matplotlib.pyplot as plt
 from PIL import Image

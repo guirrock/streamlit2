@@ -13,7 +13,7 @@ import wordtree
 import graphviz
 from io import BytesIO
 import base64
-import wordcloud
+from wordcloud import WordCloud
 
 st.set_page_config(
     layout="wide",  # Define o layout para usar a largura total
@@ -215,7 +215,7 @@ def gerar_nuvem_palavras(textos):
     texto_completo = " ".join(textos)
     
     # Criar a nuvem de palavras
-    wc = wordcloud(width=800, height=400, max_words=100).generate(texto_completo)
+    wc = WordCloud(width=800, height=400, max_words=100).generate(texto_completo)
     
     return wc
 

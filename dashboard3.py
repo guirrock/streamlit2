@@ -13,7 +13,7 @@ import wordtree
 import graphviz
 from io import BytesIO
 import base64
-import WordCloud
+import wordcloud
 
 st.set_page_config(
     layout="wide",  # Define o layout para usar a largura total

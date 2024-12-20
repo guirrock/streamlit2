@@ -15,6 +15,11 @@ from io import BytesIO
 import base64
 from wordcloud import WordCloud
 import random
+import matplotlib.pyplot as plt
+from PIL import Image
+from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
+
+
 
 st.set_page_config(
     layout="wide",  # Define o layout para usar a largura total
@@ -210,45 +215,18 @@ except Exception as e:
 
 
 st.subheader(f"Núvem de Palavras para o verbo '{selected_verb}' e categoria '{selected_category}':")
-# Função para gerar a nuvem de palavras
-def gerar_nuvem_palavras(textos):
-    # Unir todos os textos em uma string
-    texto_completo = " ".join(textos)
-    
-    # Criar a nuvem de palavras
-    wc = WordCloud(width=800, height=400, max_words=100).generate(texto_completo)
-    
-    return wc
 
-# Função para exibir a nuvem de palavras no Plotly
-def exibir_nuvem_palavras(wc):
-    # Extrair as palavras e frequências
-    palavras = list(wc.words_.keys())
-    frequencias = list(wc.words_.values())
-    
-    # Gerar posições aleatórias para dispersar as palavras
-    x_pos = [random.uniform(-0.8, 0.8) for _ in palavras]  # Aleatório no eixo X
-    y_pos = [random.uniform(-0.8, 0.8) for _ in palavras]  # Aleatório no eixo Y
-    
-    # Criar o gráfico de nuvem de palavras com Plotly
-    fig = go.Figure(go.Scatter(
-        x=x_pos,
-        y=y_pos,
-        mode="text",
-        text=palavras,
-        textfont=dict(size=[f * 100 for f in frequencias], family="Arial"),
-        showlegend=False
-    ))
-    
-    fig.update_layout(
-        xaxis=dict(showgrid=False, zeroline=False, range=[-1, 1]),
-        yaxis=dict(showgrid=False, zeroline=False, range=[-1, 1]),
-        title="Nuvem de Palavras"
-    )
-    
-    st.plotly_chart(fig)
-textos = perguntas_df[coluna].values
-
-# Gerar e exibir a nuvem de palavras
-wc = gerar_nuvem_palavras(textos)
-exibir_nuvem_palavras(wc)
+all_summary = " ".join(s for s in perguntas_df[coluna].values)
+# lista de stopword
+stopwords = set(STOPWORDS)
+stopwords.update(["da", "meu", "em", "você", "de", "ao", "os"])
+# gerar uma wordcloud
+wordcloud = WordCloud(stopwords=stopwords,
+                      background_color="black",
+                      width=1600, height=800).generate(all_summary)
+# mostrar a imagem final
+fig, ax = plt.subplots(figsize=(10,6))
+ax.imshow(wordcloud, interpolation='bilinear')
+ax.set_axis_off()
+plt.imshow(wordcloud);
+wordcloud.to_file("airbnb_summary_wordcloud.png")

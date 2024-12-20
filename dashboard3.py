@@ -197,5 +197,16 @@ g = wordtree.search_and_draw(corpus = documents, keyword = selected_verb)
 dot_representation = g.source
 
 # Renderiza o grafo no Streamlit usando Graphviz
-st.graphviz_chart(dot_representation)
+try:
+    if not dot_representation:
+        raise ValueError("Não há árvore de palavras para ser criada.")
+    
+    # Renderiza o grafo no Streamlit usando Graphviz
+    st.graphviz_chart(dot_representation)
+
+except ValueError as e:
+    st.error(f"Erro: {e}")
+
+except Exception as e:
+    st.error(f"Ocorreu um erro inesperado: {e}"))
 

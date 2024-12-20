@@ -218,6 +218,8 @@ all_summary = " ".join(s for s in documents)
 # lista de stopword
 stopwords = set(STOPWORDS)
 stopwords.update(["da", "meu", "em", "você", "de", "ao", "os"])
+
+@st.cache_data
 # gerar uma wordcloud
 wordcloud = WordCloud(stopwords=stopwords,
                       background_color="black",

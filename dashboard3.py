@@ -42,6 +42,10 @@ pivot_df = df.pivot_table(index='Categoria', columns='Keyword', values='Frequenc
 # Título do dashboard
 st.title('Análise de Verbos por Nível da Taxonomia de Bloom')
 
+st.set_page_config(
+    layout="wide",  # Define o layout para usar a largura total
+)
+
 # Opção para o usuário escolher a categoria para ordenar os verbos no eixo X
 categorias = df['Categoria'].unique()  # Obtém as categorias únicas no dataframe
 categoria_selecionada = st.selectbox('Escolha a categoria para ordenar os verbos:', categorias)

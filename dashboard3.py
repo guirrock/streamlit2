@@ -18,7 +18,8 @@ st.set_page_config(
     layout="wide",  # Define o layout para usar a largura total
 )
 
-st.markdown("<h1 style='text-align: center; color: red;'>Some title</h1>", unsafe_allow_html=True)
+# Título do dashboard
+st.markdown("<h1 style='text-align: center; color: red;'>Análise de Verbos por Nível da Taxonomia de Bloom</h1>", unsafe_allow_html=True)
 
 # Adicionar estilo CSS para a área de rolagem fixa
 st.markdown(
@@ -44,11 +45,6 @@ perguntas_df = pd.read_csv("blooms_taxonomy_dataset_pt_br.csv")
 
 # Criando uma tabela de contagem para cada verbo em cada categoria
 pivot_df = df.pivot_table(index='Categoria', columns='Keyword', values='Frequency', aggfunc='sum', fill_value=0)
-
-# Título do dashboard
-st.title('Análise de Verbos por Nível da Taxonomia de Bloom')
-
-
 
 # Opção para o usuário escolher a categoria para ordenar os verbos no eixo X
 categorias = df['Categoria'].unique()  # Obtém as categorias únicas no dataframe

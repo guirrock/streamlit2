@@ -13,6 +13,7 @@ import wordtree
 import graphviz
 from io import BytesIO
 import base64
+import WordCloud
 
 st.set_page_config(
     layout="wide",  # Define o layout para usar a largura total
@@ -205,3 +206,23 @@ try:
 except Exception as e:
     # Se ocorrer algum erro, exibimos uma mensagem de erro no Streamlit
     st.error(f"Ocorreu um erro ao tentar renderizar o gráfico: {e}")
+
+
+st.subheader(f"Núvem de Palavras para o verbo '{selected_verb}' e categoria '{selected_category}':")
+def gerar_nuvem_palavras(texto):
+    # Cria a nuvem de palavras
+    wordcloud = WordCloud(width=800, height=400, background_color='white').generate(texto)
+    
+    # Exibe a nuvem de palavras usando Matplotlib
+    plt.figure(figsize=(10, 5))
+    plt.imshow(wordcloud, interpolation='bilinear')
+    plt.axis("off")
+    plt.show()
+
+    # Exibe a nuvem de palavras no Streamlit
+    st.pyplot(plt)
+
+# Exibe a nuvem de palavras no Streamlit
+st.title("Nuvem de Palavras")
+st.write("Aqui está uma nuvem de palavras gerada a partir de um texto de exemplo.")
+gerar_nuvem_palavras(perguntas_filtradas)

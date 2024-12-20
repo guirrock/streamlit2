@@ -10,7 +10,7 @@ from collections import Counter
 import re
 from collections import defaultdict
 import wordtree
-from graphviz import Digraph
+import graphviz
 from io import BytesIO
 import base64
 

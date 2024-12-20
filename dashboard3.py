@@ -201,7 +201,7 @@ documents = perguntas_df[coluna].tolist()
 
 # Gerar a árvore de palavras
 g = wordtree.search_and_draw(corpus=documents, keyword=selected_verb)
-g.save()
+g.render()
 #render_image(g.render())
 # Renderizar a árvore de palavras em formato PNG
 #png_data = g.pipe(format='png')

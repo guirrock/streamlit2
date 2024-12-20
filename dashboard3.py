@@ -207,10 +207,11 @@ output_filepath = "wordtree_output.png"
 
 g = wordtree.search_and_draw(corpus = documents, keyword = selected_verb)
 
-g.render(filename=output_filepath, format='png', cleanup=True)
+# Salva a definição DOT
+dot_representation = g.source
 
-render_image(output_filepath)
-
+# Exibe o DOT como texto (ou use outra ferramenta para renderizar o grafo)
+st.text(dot_representation)
 
 
 #render_image(g.render())

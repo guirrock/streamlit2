@@ -215,7 +215,7 @@ all_summary = " ".join(s for s in perguntas_df[perguntas_df['Categoria'] == sele
 # lista de stopword
 stopwords = set(STOPWORDS)
 stopwords.update([
-    "a", "o", "as", "os", "à", "aos", "aquela", "aquelas", "aquelas", "aqueles", "aqui", "com", "como", "contra", "da", "das", "de", "delas", "dele", 
+    "é","a", "o", "as", "os", "à", "aos", "aquela", "aquelas", "aquelas", "aqueles", "aqui", "com", "como", "contra", "da", "das", "de", "delas", "dele", 
     "deles", "demais", "depois", "desde", "desta", "deste", "disso", "do", "dos", "e", "ela", "elas", "ele", "eles", "em", "então", "entre", "era", 
     "essas", "esses", "esta", "está", "estão", "estes", "estive", "estivemos", "estou", "eu", "essa", "essas", "este", "estes", "na", "nas", "no", 
     "nos", "não", "nós", "o", "os", "ou", "para", "pela", "pelas", "pelo", "pelos", "perante", "por", "porém", "que", "quando", "quanto", "quem", 

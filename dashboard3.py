@@ -214,7 +214,16 @@ st.subheader(f"Núvem de Palavras para a categoria '{selected_category}' e Verbo
 all_summary = " ".join(s for s in perguntas_df[perguntas_df['Categoria'] == selected_category]['Questões'])
 # lista de stopword
 stopwords = set(STOPWORDS)
-stopwords.update(["da", "meu", "em", "você", "de", "ao", "os"])
+stopwords.update([
+    "a", "o", "as", "os", "à", "aos", "aquela", "aquelas", "aquelas", "aqueles", "aqui", "com", "como", "contra", "da", "das", "de", "delas", "dele", 
+    "deles", "demais", "depois", "desde", "desta", "deste", "disso", "do", "dos", "e", "ela", "elas", "ele", "eles", "em", "então", "entre", "era", 
+    "essas", "esses", "esta", "está", "estão", "estes", "estive", "estivemos", "estou", "eu", "essa", "essas", "este", "estes", "na", "nas", "no", 
+    "nos", "não", "nós", "o", "os", "ou", "para", "pela", "pelas", "pelo", "pelos", "perante", "por", "porém", "que", "quando", "quanto", "quem", 
+    "se", "seja", "sem", "sendo", "sob", "sobre", "sua", "suas", "seu", "seus", "só", "sob", "tanta", "tantas", "tanto", "tantos", "te", "tem", 
+    "temos", "tendo", "tão", "teu", "teus", "ti", "todas", "todos", "tua", "tuas", "tudo", "uma", "umas", "um", "uns", "vai", "vamos", "você", 
+    "vocês", "ainda", "alguém", "alguma", "algumas", "algum", "alguns", "isso", "essa", "essas", "essas", "estes", "isto", "mas", "mais", "menos", 
+    "mim", "naquele", "naqueles", "nela", "neles", "não", "nem", "nem", "nosso", "nossos", "nossa", "nossas", "o", "os", "ou", "para", "pela", "pelas"
+])
 
 # gerar uma wordcloud
 wordcloud = WordCloud(stopwords=stopwords,

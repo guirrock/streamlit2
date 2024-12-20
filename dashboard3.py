@@ -180,30 +180,12 @@ else:
     st.write(f"Nenhuma pergunta encontrada para o verbo '{selected_verb}' e categoria '{selected_category}'.")
 
 
+st.subheader('Árvore de Palavras')
 
-
-def render_image(filepath: str):
-   """
-   filepath: path to the image. Must have a valid file extension.
-   """
-   mime_type = filepath.split('.')[-1:][0].lower()
-   with open(filepath, "rb") as f:
-       content_bytes = f.read()
-       content_b64encoded = base64.b64encode(content_bytes).decode()
-       image_string = f'data:image/{mime_type};base64,{content_b64encoded}'
-       st.image(image_string)
-
-# Substitua 'coluna_desejada' pelo nome da coluna que você quer extrair
 coluna = 'Questões'
 
 # Criar a lista 'documents' com os textos da coluna
 documents = perguntas_df[coluna].tolist()
-
-# Gerar a árvore de palavras
-
-# Salva o gráfico como imagem (exemplo: PNG)
-
-output_filepath = "wordtree_output.png"
 
 g = wordtree.search_and_draw(corpus = documents, keyword = selected_verb)
 
@@ -216,13 +198,3 @@ st.text(dot_representation)
 # Renderiza o grafo no Streamlit usando Graphviz
 st.graphviz_chart(dot_representation)
 
-#render_image(g.render())
-# Renderizar a árvore de palavras em formato PNG
-#png_data = g.pipe(format='png')
-
-# Exibir a imagem no Streamlit
-#st.image(png_data, caption='Árvore de Palavras', use_container_width=True)
-#plt.close(g.figure)
-
-# Exibir a imagem no Streamlit
-#st.image(buf, caption='Árvore de Palavras', use_container_width=True)

@@ -14,7 +14,6 @@ import graphviz
 from io import BytesIO
 import base64
 import random
-import matplotlib.pyplot as plt
 from PIL import Image
 from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
 

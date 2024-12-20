@@ -18,6 +18,8 @@ st.set_page_config(
     layout="wide",  # Define o layout para usar a largura total
 )
 
+st.markdown("<h1 style='text-align: center; color: red;'>Some title</h1>", unsafe_allow_html=True)
+
 # Adicionar estilo CSS para a área de rolagem fixa
 st.markdown(
     """

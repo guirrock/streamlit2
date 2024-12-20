@@ -192,9 +192,6 @@ g = wordtree.search_and_draw(corpus = documents, keyword = selected_verb)
 # Salva a definição DOT
 dot_representation = g.source
 
-# Exibe o DOT como texto (ou use outra ferramenta para renderizar o grafo)
-st.text(dot_representation)
-
 # Renderiza o grafo no Streamlit usando Graphviz
 st.graphviz_chart(dot_representation)
 

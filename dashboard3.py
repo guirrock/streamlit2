@@ -198,21 +198,9 @@ dot_representation = g.source
 
 # Renderiza o grafo no Streamlit usando Graphviz
 try:
-    # Supondo que 'wordtree.search_and_draw()' retorne um grafo com 'dot_representation'
-    g = wordtree.search_and_draw(corpus=documents, keyword=selected_verb)
-    
-    # Verifique se 'dot_representation' está vazio ou se não há grafo gerado
-    if not g:  
-        raise ValueError("Não há árvore de palavras gerada para o verbo selecionado.")
-    
-    # Renderiza o grafo no Streamlit usando Graphviz
+    # Supondo que 'g' seja o gráfico gerado
     st.graphviz_chart(g)
 
-except KeyError as e:
-    st.error(f"Erro: Não foi possível encontrar a coluna esperada no DataFrame. Detalhes: {e}")
-
-except ValueError as e:
-    st.error(f"Erro: {e}")
-
 except Exception as e:
-    st.error(f"Ocorreu um erro inesperado: {e}")
+    # Se ocorrer algum erro, exibimos uma mensagem de erro no Streamlit
+    st.error(f"Ocorreu um erro ao tentar renderizar o gráfico: {e}")

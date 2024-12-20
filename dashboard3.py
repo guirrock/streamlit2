@@ -168,7 +168,7 @@ prefix = re.escape(selected_verb[:4])
 
 # Exibir as perguntas filtradas em uma área com barra de rolagem
 if not perguntas_filtradas.empty:
-    st.markdown(f"<p>Perguntas filtradas para '{selected_verb}' em '{selected_category}':</p>")
+    st.markdown(f"Perguntas filtradas para '{selected_verb}' em '{selected_category}':")
 
     # Construir um bloco único de HTML para todas as perguntas
     perguntas_html = '<div class="scrollable-box">'
@@ -211,7 +211,7 @@ except Exception as e:
     # Se ocorrer algum erro, exibimos uma mensagem de erro no Streamlit
     st.error(f"Ocorreu um erro ao tentar renderizar o gráfico: {e}")
 
-
+st.markdown("</br>", unsafe_allow_html=True)
 st.subheader(f"Núvem de Palavras para a categoria '{selected_category}' e Verbo '{selected_verb}':")
 
 all_summary = " ".join(s for s in perguntas_df[perguntas_df['Categoria'] == selected_category]['Questões'])

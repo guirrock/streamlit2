@@ -222,9 +222,8 @@ stopwords.update(["da", "meu", "em", "você", "de", "ao", "os"])
 wordcloud = WordCloud(stopwords=stopwords,
                       background_color="black",
                       width=1600, height=800).generate("hudas asdfuiasdu asduasduli asduiosdf ua ysduio y")
-# mostrar a imagem final
-fig, ax = plt.subplots(figsize=(10,6))
-ax.imshow(wordcloud, interpolation='bilinear')
-ax.set_axis_off()
-plt.imshow(wordcloud);
+# Salvar a imagem
 wordcloud.to_file("airbnb_summary_wordcloud.png")
+
+# Exibir a imagem no Streamlit
+st.image(wordcloud.to_image(), caption="Word Cloud", use_column_width=True)

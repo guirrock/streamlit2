@@ -222,6 +222,6 @@ stopwords.update(["da", "meu", "em", "você", "de", "ao", "os"])
 # gerar uma wordcloud
 wordcloud = WordCloud(stopwords=stopwords,
                       background_color="black",
-                      width=1600, height=800).generate(all_summary)
+                      width=1600, height=800).generate(perguntas_filtradas)
 # Exibir a imagem no Streamlit
 st.image(wordcloud.to_image(), use_container_width=True)

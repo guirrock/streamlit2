@@ -214,8 +214,7 @@ except Exception as e:
 
 st.subheader(f"Núvem de Palavras para a categoria '{selected_category}' e Verbo '{selected_verb}':")
 
-all_summary = " ".join(s for s in perguntas_filtradas)
-st.subheader(all_summary)
+all_summary = " ".join(s for s in questoes_bt1 = perguntas_df[perguntas_df['Categoria'] == selected_category]['Questões'])
 # lista de stopword
 stopwords = set(STOPWORDS)
 stopwords.update(["da", "meu", "em", "você", "de", "ao", "os"])
@@ -223,6 +222,6 @@ stopwords.update(["da", "meu", "em", "você", "de", "ao", "os"])
 # gerar uma wordcloud
 wordcloud = WordCloud(stopwords=stopwords,
                       background_color="black",
-                      width=1600, height=800).generate("")
+                      width=1600, height=800).generate(all_summary)
 # Exibir a imagem no Streamlit
 st.image(wordcloud.to_image(), use_container_width=True)

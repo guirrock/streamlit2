@@ -212,7 +212,7 @@ except Exception as e:
     st.error(f"Ocorreu um erro ao tentar renderizar o gráfico: {e}")
 
 
-st.subheader(f"Núvem de Palavras para a categoria '{selected_category}':")
+st.subheader(f"Núvem de Palavras para a categoria '{selected_category}' e Verbo '{selected_verb}':")
 
 all_summary = " ".join(s for s in perguntas_df[perguntas_df['Categoria'] == selected_category]['Questões'])
 # lista de stopword

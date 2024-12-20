@@ -215,7 +215,7 @@ def gerar_nuvem_palavras(textos):
     texto_completo = " ".join(textos)
     
     # Criar a nuvem de palavras
-    wc = WordCloud(width=800, height=400, max_words=100).generate(texto_completo)
+    wc = wordcloud(width=800, height=400, max_words=100).generate(texto_completo)
     
     return wc
 

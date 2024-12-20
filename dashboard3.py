@@ -189,9 +189,9 @@ st.subheader('Árvore de Palavras')
 coluna = 'Questões'
 
 # Criar a lista 'documents' com os textos da coluna
-documents = perguntas_filtradas[coluna].tolist()
+documents = perguntas_df[coluna].tolist()
 
-g = wordtree.search_and_draw(corpus = documents, keyword = filtered_verbos)
+g = wordtree.search_and_draw(corpus = documents, keyword = selected_verb)
 
 # Salva a definição DOT
 dot_representation = g.source

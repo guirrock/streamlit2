@@ -225,10 +225,14 @@ def exibir_nuvem_palavras(wc):
     palavras = list(wc.words_.keys())
     frequencias = list(wc.words_.values())
     
+    # Gerar posições aleatórias para dispersar as palavras
+    x_pos = [random.uniform(-0.8, 0.8) for _ in palavras]  # Aleatório no eixo X
+    y_pos = [random.uniform(-0.8, 0.8) for _ in palavras]  # Aleatório no eixo Y
+    
     # Criar o gráfico de nuvem de palavras com Plotly
     fig = go.Figure(go.Scatter(
-        x=[0] * len(palavras),
-        y=[i for i in range(len(palavras))],
+        x=x_pos,
+        y=y_pos,
         mode="text",
         text=palavras,
         textfont=dict(size=[f * 100 for f in frequencias], family="Arial"),
@@ -236,13 +240,12 @@ def exibir_nuvem_palavras(wc):
     ))
     
     fig.update_layout(
-        xaxis=dict(showgrid=False, zeroline=False),
-        yaxis=dict(showgrid=False, zeroline=False),
+        xaxis=dict(showgrid=False, zeroline=False, range=[-1, 1]),
+        yaxis=dict(showgrid=False, zeroline=False, range=[-1, 1]),
         title="Nuvem de Palavras"
     )
     
     st.plotly_chart(fig)
-
 textos = perguntas_df[coluna].values
 
 # Gerar e exibir a nuvem de palavras

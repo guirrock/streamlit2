@@ -205,6 +205,8 @@ documents = perguntas_df[coluna].tolist()
 
 output_filepath = "wordtree_output.png"
 
+g = wordtree.search_and_draw(corpus = documents, keyword = selected_verb)
+
 g.render(filename=output_filepath, format='png', cleanup=True)
 
 render_image(output_filepath)

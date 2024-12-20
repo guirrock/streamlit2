@@ -184,7 +184,7 @@ else:
     st.write(f"Nenhuma pergunta encontrada para o verbo '{selected_verb}' e categoria '{selected_category}'.")
 
 
-st.subheader('Árvore de Palavras')
+st.subheader(f"Árvore de Palavras do Verbo'{selected_verb}':")
 
 coluna = 'Questões'
 

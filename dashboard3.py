@@ -200,7 +200,7 @@ documents = perguntas_df[coluna].tolist()
 g = wordtree.search_and_draw(corpus = documents, keyword = selected_verb)
 
 # Salva a definição DOT
-dot_representation = g.source
+#dot_representation = g.source
 
 # Renderiza o grafo no Streamlit usando Graphviz
 try:

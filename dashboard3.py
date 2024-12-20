@@ -225,4 +225,6 @@ def gerar_nuvem_palavras(texto):
 # Exibe a nuvem de palavras no Streamlit
 st.title("Nuvem de Palavras")
 st.write("Aqui está uma nuvem de palavras gerada a partir de um texto de exemplo.")
-gerar_nuvem_palavras(perguntas_df)
+# Converte o texto da coluna 'texto' em uma única string
+texto_unico = ' '.join(perguntas_df['coluna'].values)
+gerar_nuvem_palavras(texto_unico)

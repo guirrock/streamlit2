@@ -225,4 +225,4 @@ def gerar_nuvem_palavras(texto):
 # Exibe a nuvem de palavras no Streamlit
 st.title("Nuvem de Palavras")
 st.write("Aqui está uma nuvem de palavras gerada a partir de um texto de exemplo.")
-gerar_nuvem_palavras(perguntas_filtradas)
+gerar_nuvem_palavras(perguntas_df)

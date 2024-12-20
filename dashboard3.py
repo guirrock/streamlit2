@@ -168,7 +168,7 @@ prefix = re.escape(selected_verb[:4])
 
 # Exibir as perguntas filtradas em uma área com barra de rolagem
 if not perguntas_filtradas.empty:
-    st.subheader(f"Perguntas filtradas para '{selected_verb}' em '{selected_category}':")
+    st.markdown(f"<p>Perguntas filtradas para '{selected_verb}' em '{selected_category}':</p>")
 
     # Construir um bloco único de HTML para todas as perguntas
     perguntas_html = '<div class="scrollable-box">'

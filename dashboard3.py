@@ -226,5 +226,6 @@ def gerar_nuvem_palavras(texto):
 st.title("Nuvem de Palavras")
 st.write("Aqui está uma nuvem de palavras gerada a partir de um texto de exemplo.")
 # Converte o texto da coluna 'texto' em uma única string
-texto_unico = ' '.join(perguntas_df['coluna'].values)
+texto_unico = ""
+texto_unico = texto_unico.join(perguntas_df['coluna'].values)
 gerar_nuvem_palavras(texto_unico)

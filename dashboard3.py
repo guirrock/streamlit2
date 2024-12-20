@@ -54,7 +54,7 @@ pivot_df = df.pivot_table(index='Categoria', columns='Keyword', values='Frequenc
 
 # Opção para o usuário escolher a categoria para ordenar os verbos no eixo X
 categorias = df['Categoria'].unique()  # Obtém as categorias únicas no dataframe
-categoria_selecionada = st.selectbox('Escolha a categoria para ordenar os verbos:', categorias)
+categoria_selecionada = st.selectbox('Escolha a categoria para ordenar os verbos no heatmap:', categorias)
 
 # Opção para o usuário inserir o número mínimo de vezes que cada verbo deve aparecer
 min_freq = st.number_input('Número mínimo de aparições dos verbos no heatmap:', min_value=1, value=1, step=1)
@@ -198,9 +198,6 @@ coluna = 'Questões'
 documents = perguntas_df[coluna].tolist()
 
 g = wordtree.search_and_draw(corpus = documents, keyword = selected_verb)
-
-# Salva a definição DOT
-#dot_representation = g.source
 
 # Renderiza o grafo no Streamlit usando Graphviz
 try:

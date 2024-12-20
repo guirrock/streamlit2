@@ -214,7 +214,7 @@ except Exception as e:
 
 st.subheader(f"Núvem de Palavras para o verbo '{selected_verb}' e categoria '{selected_category}':")
 
-all_summary = " ".join(s for s in perguntas_df['Questões'])
+all_summary = " ".join(s for s in perguntas_df[perguntas_df['Categoria'] == selected_category]['Questões'])
 st.subheader(all_summary)
 # lista de stopword
 stopwords = set(STOPWORDS)
@@ -223,6 +223,6 @@ stopwords.update(["da", "meu", "em", "você", "de", "ao", "os"])
 # gerar uma wordcloud
 wordcloud = WordCloud(stopwords=stopwords,
                       background_color="black",
-                      width=1600, height=800).generate("Ambiente tranquilo e familiar,ótimo para viajantes que no final do dia queiram descansar e ter uma noite tranquila. Excelente bairro que fica próximo a Lagoa Rodrigo de Freitas, que é um dos lindos cartões postais de nossa cidade. Aguardo você! O quarto é lindo e bem grande e possui acesso para a varanda do apartamento. Possui grandes armários,  bancada. Esse é o quarto maior de um apartamento/cobertura de 150m2 que possui 3 quartos, sala, varandas em torno de todo o apartamento, cozinha ampla com dependências. Esse quarto não possui banheiro privativo. Os hospedes desse quarto compartilham o banheiro com as pessoas que estiverem utilizando o segundo quarto. O terceiro quarto é a suíte que normalmente é utilizada por mim e meu marido. Aconchegante, amplo, básico, arejado, iluminado com luz natural em prédio seguro e familiar. Prédio com portaria 24 horas e cameras de segurança em todos os andares do edifício. Tudo isto em Copacabana a quase 1 quadra do mar! É o segundo prédio da segunda quadra da praia!!! Está localizado na Av. Prado Junior quase esquina com Av. N.Sra de Copacabana!")
+                      width=1600, height=800).generate(all_summary)
 # Exibir a imagem no Streamlit
 st.image(wordcloud.to_image(), caption="Word Cloud", use_container_width=True)

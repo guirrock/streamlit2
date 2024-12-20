@@ -209,20 +209,42 @@ except Exception as e:
 
 
 st.subheader(f"Núvem de Palavras para o verbo '{selected_verb}' e categoria '{selected_category}':")
-def gerar_nuvem_palavras(texto):
-    # Cria a nuvem de palavras
-    wordcloud = WordCloud(width=800, height=400, background_color='white').generate(texto)
+# Função para gerar a nuvem de palavras
+def gerar_nuvem_palavras(textos):
+    # Unir todos os textos em uma string
+    texto_completo = " ".join(textos)
     
-    # Exibe a nuvem de palavras usando Matplotlib
-    plt.figure(figsize=(10, 5))
-    plt.imshow(wordcloud, interpolation='bilinear')
-    plt.axis("off")
-    plt.show()
+    # Criar a nuvem de palavras
+    wc = WordCloud(width=800, height=400, max_words=100).generate(texto_completo)
+    
+    return wc
 
-    # Exibe a nuvem de palavras no Streamlit
-    st.pyplot(plt)
+# Função para exibir a nuvem de palavras no Plotly
+def exibir_nuvem_palavras(wc):
+    # Extrair as palavras e frequências
+    palavras = list(wc.words_.keys())
+    frequencias = list(wc.words_.values())
+    
+    # Criar o gráfico de nuvem de palavras com Plotly
+    fig = go.Figure(go.Scatter(
+        x=[0] * len(palavras),
+        y=[i for i in range(len(palavras))],
+        mode="text",
+        text=palavras,
+        textfont=dict(size=[f * 100 for f in frequencias], family="Arial"),
+        showlegend=False
+    ))
+    
+    fig.update_layout(
+        xaxis=dict(showgrid=False, zeroline=False),
+        yaxis=dict(showgrid=False, zeroline=False),
+        title="Nuvem de Palavras"
+    )
+    
+    st.plotly_chart(fig)
 
-# Exibe a nuvem de palavras no Streamlit
-st.title("Nuvem de Palavras")
-st.write("Aqui está uma nuvem de palavras gerada a partir de um texto de exemplo.")
-gerar_nuvem_palavras("ipasdfp  huisdf  uiosd osdfui yasdfoui")
+textos = perguntas_df[coluna].values
+
+# Gerar e exibir a nuvem de palavras
+wc = gerar_nuvem_palavras(textos)
+exibir_nuvem_palavras(wc)

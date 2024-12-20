@@ -224,4 +224,4 @@ wordcloud = WordCloud(stopwords=stopwords,
                       background_color="black",
                       width=1600, height=800).generate(all_summary)
 # Exibir a imagem no Streamlit
-st.image(wordcloud.to_image(), caption="Word Cloud", use_container_width=True)
+st.image(wordcloud.to_image(), use_container_width=True)

@@ -24,7 +24,7 @@ st.set_page_config(
 )
 
 # Título do dashboard
-st.markdown("<h1 style='text-align: center; color: red;'>Análise de Verbos por Nível da Taxonomia de Bloom</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; color: red;'>Análise Visual de Enunciados de Perguntas Avaliativas a partir de Verbos</h1>", unsafe_allow_html=True)
 st.markdown("<h3 style='text-align: center; color: black;'>Projeto Final - Disciplina - Visual Analytics for Data Science - INF/UFRGS</h3>", unsafe_allow_html=True)
 
 # Adicionar estilo CSS para a área de rolagem fixa

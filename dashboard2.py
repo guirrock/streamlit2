@@ -12,7 +12,7 @@ perguntas_df = pd.read_csv("blooms_taxonomy_dataset_pt_br.csv")
 pivot_df = df.pivot_table(index='Categoria', columns='Keyword', values='Frequency', aggfunc='sum', fill_value=0)
 
 # Título do dashboard
-st.title('Análise de Verbos por Nível da Taxonomia de Bloom')
+st.title('Análise Visual de Enunciados de Perguntas Avaliativas a partir de Verbos')
 
 # Opção para o usuário escolher a categoria para ordenar os verbos no eixo X
 categorias = df['Categoria'].unique()  # Obtém as categorias únicas no dataframe
